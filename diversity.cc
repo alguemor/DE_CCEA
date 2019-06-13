@@ -119,8 +119,7 @@ Fitness DIVERSITY::run() {
         //do {
         //   p_best_ind = sorted_array[rand() % p_num];
         //} while (p_best_ind == target);                  
-
-        operateCurrentToPBest1BinWithArchive(pop, &children[target][0], target, pop_sf[target], pop_cr[target]);
+        operateCurrentTo1Bin(pop, &children[target][0], target, pop_sf[target], pop_cr[target]);
       }
   
     // evaluate the children's fitness values
@@ -232,9 +231,9 @@ Fitness DIVERSITY::run() {
 }
 
 
-void DIVERSITY::operateCurrentToPBest1BinWithArchive(const vector<Individual> &pop, Individual child, int &target, variable &scaling_factor, variable &cross_rate) {
+void DIVERSITY::operateCurrentTo1Bin(const vector<Individual> &pop, Individual child, int &target, variable &scaling_factor, variable &cross_rate) {
 
-  int r1, r2;
+  int r1, r2, r3;
   
   do {
     r1 = rand() % pop_size;
@@ -242,14 +241,16 @@ void DIVERSITY::operateCurrentToPBest1BinWithArchive(const vector<Individual> &p
   do {
     r2 = rand() % (pop_size);
   } while ((r2 == target) || (r2 == r1));
-
+ do {
+    r3 = rand() % (pop_size);
+  } while ((r3 == target) || (r3 == r1) || (r2==r3));
   int random_variable = rand() % problem_size;
 
     for (int i = 0; i < problem_size; i++) 
     {
       if ((randDouble() < cross_rate) || (i == random_variable)) 
       {
-	child[i] = pop[target][i] + scaling_factor* (pop[r1][i] - pop[r2][i]);     // jSO
+	child[i] = pop[r3][i] + scaling_factor* (pop[r1][i] - pop[r2][i]);     // jSO
       }
       else 
 	child[i] = pop[target][i];

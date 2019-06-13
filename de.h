@@ -125,7 +125,7 @@ class DIVERSITY: public searchAlgorithm {
 public:
   virtual Fitness run();
   void setSHADEParameters();
-  void operateCurrentToPBest1BinWithArchive(const vector<Individual> &pop, Individual child, int &target, variable &scaling_factor, variable &cross_rate);
+  void operateCurrentTo1Bin(const vector<Individual> &pop, Individual child, int &target, variable &scaling_factor, variable &cross_rate);
   double distance(Individual A, Individual B);
   void replacement(vector<Individual> &pop, vector<Fitness> &fitness, vector<Individual> &children,vector<Fitness> &children_fitness, vector<Individual> &elite, vector<Fitness> &elite_fitness);
  void reducePopulation(vector<Individual> &pop, vector<Fitness> & fitness,vector<Individual> & elite, vector<Fitness> &elite_fitness, int nfes, int max_num_evaluations);
