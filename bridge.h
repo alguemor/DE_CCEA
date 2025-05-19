@@ -14,7 +14,7 @@ public:
     ~ClusteringBridge();
     
     // Convierte un individuo DE a una solución de clustering
-    void individualToSolution(Individual individual, Solution& solution);
+    void individualToSolution(Individual individual, Solution*& solution);
     
     // Evalúa un individuo y retorna su fitness
     Fitness evaluateIndividual(Individual individual);

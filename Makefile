@@ -1,7 +1,7 @@
 HEADER = de.h
 TARGET = DE_CCEA_exe
 
-OBJS := $(patsubst %.cc,%.o,$(wildcard *.cc)) \ problem.o solutionGreedy.o util.o
+OBJS := $(patsubst %.cc,%.o,$(wildcard *.cc)) \ problem.o solutionGreedy.o util.o dataset_manager.o bridge.o
 CC = g++
 OPTION = -Ofast -march=native
 
@@ -19,6 +19,12 @@ solutionGreedy.o: solutionGreedy.cpp solutionGreedy.h
 
 util.o: util.cpp util.h
     $(CC) $(CFLAGS) $(OPTION) -c util.cpp
+
+dataset_manager.o: dataset_manager.cpp dataset_manager.h
+    $(CC) $(CFLAGS) $(OPTION) -c dataset_manager.cpp
+
+bridge.o: bridge.cpp bridge.h
+    $(CC) $(CFLAGS) $(OPTION) -c bridge.cpp
 
 clean:
 	rm -rf *.o

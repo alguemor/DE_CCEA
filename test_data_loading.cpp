@@ -6,7 +6,7 @@
 #include <iostream>
 
 int main() {
-    ClusteringBridge bridge("01ruspini.txt", "01clusters.txt");
+    ClusteringBridge bridge("input_data/ruspini/01ruspini.txt", "input_data/ruspini/01clusters.txt");
     
     std::cout << "Número de clusters: " << bridge.getNumClusters() << std::endl;
     std::cout << "Número de puntos: " << bridge.getNumPoints() << std::endl;
