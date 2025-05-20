@@ -17,27 +17,26 @@ void ClusteringBridge::individualToSolution(Individual individual, Solution*& so
     int numClusters = problem->getNumClusters();
     
     // Convertir el individuo a centros de clusters
-    std::vector<std::pair<double, double>> centers;
+    solution->beforeClusterCenters.clear();
     for (int i = 0; i < numClusters; i++) {
         double x = individual[i * 2];
         double y = individual[i * 2 + 1];
-        centers.push_back(std::make_pair(x, y));
+        solution->beforeClusterCenters.push_back(std::make_pair(x, y));    
     }
     
-    // Asignar los centros a la solución
-    solution->beforeClusterCenters = centers;
-    
-    // Calcular distancias y realizar asignación greedy
+    // calcular distancias desde cada punto a los centros
     solution->calculateDistances();
     solution->sortDistances();
-    solution->greedy();
-    solution->updateEvaluation();
 }
 
 Fitness ClusteringBridge::evaluateIndividual(Individual individual) {
     Solution* solution = nullptr;
     individualToSolution(individual, solution);
-    
+   
+    // se cambio desde individualToSolution
+    solution->greedy();
+    solution->updateEvaluation();
+
     Fitness fitness = solution->getFitness();
     
     delete solution;

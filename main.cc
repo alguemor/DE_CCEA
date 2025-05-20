@@ -40,16 +40,16 @@ ClusteringBridge* g_clusteringBridge = nullptr;
 
 //.Exec path sed n_problem dimension popsize Di
 int main(int argc, char **argv) {
-
-  int sed = atoi(argv[2]);
-  std::string datasetName = argv[3]
-  g_problem_size = atoi(argv[4]);
-  //available number of fitness evaluations 
-  g_max_num_evaluations = 25000000;
-
-  g_pop_size = atoi(argv[5]);// (int)round(sqrt(g_problem_size) * log(g_problem_size) * 25);
  
-  double di = atof(argv[6]);
+  int sed = atoi(argv[1]);
+  std::string datasetName = argv[2];
+  g_problem_size = atoi(argv[3]);
+  //available number of fitness evaluations 
+  g_max_num_evaluations = 25000;
+
+  g_pop_size = atoi(argv[4]);// (int)round(sqrt(g_problem_size) * log(g_problem_size) * 25);
+ 
+  double di = atof(argv[5]);
 
   DatasetManager datasetManager;
    if(!datasetManager.datasetExists(datasetName)){
@@ -66,9 +66,9 @@ int main(int argc, char **argv) {
   srand(sed);
 
   g_function_number = 1;
-  g_Di = sqrt(g_problem_size)*atof(di);
+  g_Di = sqrt(g_problem_size)*di;
 
-  sprintf(g_fileName, "results/%s_s%d_p%_", datasetName.c_tr(), sed, popsize);
+  sprintf(g_fileName, "results/%s/s%d_p%d", datasetName.c_str(), sed, g_problem_size);
 
   searchAlgorithm *alg = new DIVERSITY();
   outFile << alg->run();

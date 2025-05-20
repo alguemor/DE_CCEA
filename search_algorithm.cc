@@ -9,6 +9,9 @@
 */
 
 #include"de.h"
+#include "bridge.h"
+#include <climits>
+#include <algorithm>
 
 void searchAlgorithm::initializeParameters() {
   function_number = g_function_number;
@@ -18,11 +21,14 @@ void searchAlgorithm::initializeParameters() {
   initializeFitnessFunctionParameters();
 }
 
-void searchAlgorithm::evaluatePopulation(const vector<Individual> &pop, vector<Fitness> &fitness) {
-  for (int i = 0; i < pop_size; i++) {
-    //cec14_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
-    cec17_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
-  }
+void searchAlgorithm::evaluatePopulation(vector<Individual> &pop, vector<Fitness> &fitness) {
+    for (int i = 0; i < pop_size; i++) {
+        if(g_clusteringBridge != nullptr){
+            fitness[i] = g_clusteringBridge->evaluateIndividual(pop[i]);
+        }else{
+            cec17_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
+        }
+    }
 }
 
 void searchAlgorithm::initializeFitnessFunctionParameters() {
@@ -54,8 +60,31 @@ void searchAlgorithm::setBestSolution(const vector<Individual> &pop, const vecto
 Individual searchAlgorithm::makeNewIndividual() {
   Individual individual = (variable*)malloc(sizeof(variable) * problem_size);
 
-  for (int i = 0; i < problem_size; i++) {
-    individual[i] = ((max_region - min_region) * randDouble()) + min_region;
+  if (g_clusteringBridge != nullptr) {
+    const auto* problem = g_clusteringBridge->getProblem();
+    const auto& dataset = problem->getDataset();
+    
+    int minX = INT_MAX, minY = INT_MAX;
+    int maxX = INT_MIN, maxY = INT_MIN;
+    
+    for (const auto& point : dataset) {
+      if (point.size() >= 2) {
+        minX = std::min(minX, point[0]);
+        minY = std::min(minY, point[1]);
+        maxX = std::max(maxX, point[0]);
+        maxY = std::max(maxY, point[1]);
+      }
+    }
+    
+    int numClusters = problem_size / 2;
+    for (int i = 0; i < numClusters; i++) {
+      individual[i * 2] = minX + randDouble() * (maxX - minX);
+      individual[i * 2 + 1] = minY + randDouble() * (maxY - minY);
+    }
+  } else {
+    for (int i = 0; i < problem_size; i++) {
+      individual[i] = ((max_region - min_region) * randDouble()) + min_region;
+    }
   }
 
   return individual;
