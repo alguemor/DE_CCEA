@@ -16,10 +16,6 @@ private:
     vector<int> clusterLimits;
     bool clusterCoordinatesUpdated; // flag coordenadas actualizadas
 
-    void calculateDistances();
-    void sortDistances();
-    void calculateClusterCoordinates();
-
 public:
     Solution(Problem& prob);
     ~Solution();
@@ -36,6 +32,11 @@ public:
 
     void greedy();
     const vector<vector<pair<int, int>>>& getClusterCoordinates(); // flag
+ 
+    void calculateDistances();
+    void sortDistances();
+    void calculateClusterCoordinates();
+
     // metodo actualizar valores evaluacion
     void updateEvaluation();
     void solveGreedy();

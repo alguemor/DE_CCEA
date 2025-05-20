@@ -8,8 +8,12 @@ authors: Joel Chacón Castillo, Carlos Segura González
 */
 
 #include"de.h"
+#include "bridge.h"
+
+extern ClusteringBridge* g_clusteringBridge;
 
 Fitness DIVERSITY::run() {
+    cout << max_num_evaluations<< endl;
   //cout << scientific << setprecision(8);
   initializeParameters();
   setSHADEParameters();
@@ -41,6 +45,10 @@ Fitness DIVERSITY::run() {
     pop.push_back(makeNewIndividual());
     children.push_back((variable*)malloc(sizeof(variable) * problem_size));
     elite.push_back((variable*)malloc(sizeof(variable) * problem_size));
+  }
+  if(g_clusteringBridge !=  nullptr){
+    g_clusteringBridge->getNumClusters();
+    g_clusteringBridge->getNumPoints();
   }
   evaluatePopulation(pop, fitness);
   for(int i = 0; i < pop_size; i++)

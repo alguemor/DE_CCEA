@@ -46,7 +46,7 @@ class searchAlgorithm {
 public:
   virtual Fitness run() = 0;
 protected:
-  void evaluatePopulation(const vector<Individual> &pop, vector<Fitness> &fitness);
+  void evaluatePopulation(vector<Individual> &pop, vector<Fitness> &fitness);
   void initializeFitnessFunctionParameters();
 
   void initializeParameters();
@@ -133,6 +133,9 @@ public:
   int nfes, min_pop_size, max_pop_size;
   double D, Di;
 };
+
+class ClusteringBridge;
+extern ClusteringBridge* g_clusteringBridge;
 
 #endif
 
