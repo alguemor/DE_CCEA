@@ -25,11 +25,6 @@ Fitness DIVERSITY::run() {
   strcat(fitnessName, "_F");	
   outFitness.open(fitnessName, ios::out);
 
- char ind_dat[500];
-  strcpy(ind_dat, g_fileName);
-  strcat(ind_dat, "_dat");
-  outVar.open(ind_dat, ios::out);
-
   vector <Individual> pop;
   vector <Fitness> fitness(pop_size, 10);
   vector <Individual> children;
@@ -171,12 +166,13 @@ Fitness DIVERSITY::run() {
 
 	double percent = 0.01;
 	static vector<bool> report( 1.0/percent + 5, false);
-	for(double l = 0, z = 0 ; l < 1.0; l+=percent, z++)
+	/*for(double l = 0, z = 0 ; l < 1.0; l+=percent, z++)
 	{
-		if(  nfes > (int)(l*max_num_evaluations) && !report[z] )
+        if(  nfes > (int)(l*max_num_evaluations) && !report[z] )
 	    {
 	        for(int i = 0; i < pop_size; i++)
 		{
+            
 			//print the population information.....
 			for(int k = 0 ; k < problem_size; k++)
 			  //cout << pop[i][k] << " ";
@@ -188,13 +184,14 @@ Fitness DIVERSITY::run() {
 			outVar << endl;
 			//cout<< endl;
 			report[z] = true;
-		}
-		outFitness << bsf_fitness<< " ";
-		for(int k = 0 ; k < problem_size; k++)
+		}		
+        outFitness << bsf_fitness<< " ";
+		for(int k = 0 ; k < problem_size; k++){
 		 outFitness << bsf_solution[k] << " ";
-		outFitness <<endl;
+		}
+        outFitness <<endl;
 	   }
-	}
+	}*/
 	
      replacement(pop, fitness, children, children_fitness, elite, elite_fitness);
 	

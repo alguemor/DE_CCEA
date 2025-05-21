@@ -23,11 +23,7 @@ void searchAlgorithm::initializeParameters() {
 
 void searchAlgorithm::evaluatePopulation(vector<Individual> &pop, vector<Fitness> &fitness) {
     for (int i = 0; i < pop_size; i++) {
-        if(g_clusteringBridge != nullptr){
-            fitness[i] = g_clusteringBridge->evaluateIndividual(pop[i]);
-        }else{
-            cec17_test_func(pop[i],  &fitness[i], problem_size, 1, function_number);
-        }
+        fitness[i] = g_clusteringBridge->evaluateIndividual(pop[i]);
     }
 }
 
