@@ -15,14 +15,14 @@ private:
     const Solution& solution;
     mutable mt19937 generator; // motor numeros aleatorios - generacion aleatoria centroides
 
-    public:
+public:
     Util(const Problem& prob, const Solution&sol);
     ~Util();
     // numeros / centros aleatorios
-    vector<pair<double, double>> generateRandomCenters(int numClusters) const;
-    vector<pair<double, double>> calculateRealClusterCoordinates(int numClusters) const;
+    vector<vector<double>> generateRandomCenters(int numClusters) const;
+    vector<vector<double>> calculateRealClusterCoordinates(int numClusters) const;
     // distancia entre centros
-    double distance(const vector<pair<double, double>>& A, const vector<pair<double, double>>& B) const;
+    double distance(const vector<vector<double>>& A, const vector<vector<double>>& B) const;
     void printDistance() const;
     // impresiones
     void printBeforeClusterCenters() const;

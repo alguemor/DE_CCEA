@@ -8,11 +8,15 @@ using namespace std;
 Solution::Solution(Problem& prob) : problem(prob), fitness(0.0), clusterCoordinatesUpdated(false){
     int numClusters = problem.getNumClusters();
     int numPoints = problem.getPoints();
+    int variables = problem.getVariables();
     distances.resize(numPoints, vector<double>(numClusters, 0.0));
     assignment.resize(numPoints, 0);
     clusterLimits = problem.getLimClusters();
     clusterValues.resize(numClusters, 0.0);
     clusterCoordinates.resize(numClusters);
+
+    beforeClusterCenters.resize(numClusters, vector<double>(variables, 0.0));
+    afterClusterCenters.resize(numClusters, vector<double>(variables, 0.0));
 }
 
 Solution::~Solution(){
@@ -22,12 +26,16 @@ void Solution::calculateDistances(){
     const auto& dataset = problem.getDataset();
     int numPoints = problem.getPoints();
     int numClusters = problem.getNumClusters();
+    int variables = problem.getVariables();
 
     for(int i = 0; i < numPoints; i++){
         for(int j = 0; j < numClusters; j++){
-            int dx = dataset[i][0] - beforeClusterCenters[j].first;
-            int dy = dataset[i][1] - beforeClusterCenters[j].second;
-            distances[i][j] = sqrt(dx*dx + dy*dy);
+            double distance = 0.0;
+            for(int d = 0; d < variables; d++){
+                double dif = dataset[i][d] - beforeClusterCenters[j][d];
+                distance += dif * dif;
+            }
+            distances[i][j] = sqrt(distance);
         }
     }
 }
@@ -102,18 +110,18 @@ void Solution::solveGreedy(){
     util.printClusterValues();
     util.printFitness();
 
-    util.printDistance();
+    //util.printDistance();
 }
 
-const vector<pair<double, double>>& Solution::getBeforeClusterCenters() const{
+const vector<vector<double>>& Solution::getBeforeClusterCenters() const{
     return beforeClusterCenters;
 }
 
-const vector<pair<double, double>>& Solution::getAfterClusterCenters() const{
+const vector<vector<double>>& Solution::getAfterClusterCenters() const{
     return afterClusterCenters;
 }
 
-const vector<vector<pair<int, int>>>& Solution::getClusterCoordinates(){
+const vector<vector<vector<double>>>& Solution::getClusterCoordinates(){
     if(!clusterCoordinatesUpdated){
         clusterCoordinates = problem.calculatePointsCoordinatesPerCluster(assignment);
         clusterCoordinatesUpdated = true;
@@ -121,7 +129,7 @@ const vector<vector<pair<int, int>>>& Solution::getClusterCoordinates(){
     return clusterCoordinates;
 }
 
-const vector<vector<pair<int, int>>>& Solution::getClusterCoordinates() const{
+const vector<vector<vector<double>>>& Solution::getClusterCoordinates() const{
     return clusterCoordinates; // asumimos coordenadas calculadas
 }
 

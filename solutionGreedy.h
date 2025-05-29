@@ -20,18 +20,18 @@ public:
     Solution(Problem& prob);
     ~Solution();
 
-    vector<pair<double, double>> beforeClusterCenters;
+    vector<vector<double>> beforeClusterCenters;
     // centros despues de asignacion
-    vector<pair<double, double>> afterClusterCenters;
+    vector<vector<double>> afterClusterCenters;
     vector<int> assignment;
     // cache en Solution, logica en Problem
-    vector<vector<pair<int, int>>> clusterCoordinates;
+    vector<vector<vector<double>>> clusterCoordinates;
     vector<double> clusterValues;
     double fitness;
     double distance;
 
     void greedy();
-    const vector<vector<pair<int, int>>>& getClusterCoordinates(); // flag
+    const vector<vector<vector<double>>>& getClusterCoordinates(); // flag
  
     void calculateDistances();
     void sortDistances();
@@ -41,13 +41,13 @@ public:
     void updateEvaluation();
     void solveGreedy();
     // getters
-    const vector<pair<double, double>>& getBeforeClusterCenters() const;
-    const vector<vector<pair<int, int>>>& getClusterCoordinates() const;
+    const vector<vector<double>>& getBeforeClusterCenters() const;
+    const vector<vector<vector<double>>>& getClusterCoordinates() const;
     const vector<int>& getAssignment() const;
     const vector<double>& getClusterValues() const;
     double getFitness() const;
 
-    const vector<pair<double, double>>& getAfterClusterCenters() const;
+    const vector<vector<double>>& getAfterClusterCenters() const;
     // distancia
     double getDistance() const;
 };

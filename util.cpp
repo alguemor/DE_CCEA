@@ -14,114 +14,126 @@ Util::~Util(){
 
 }
 
-vector<pair<double, double>> Util::generateRandomCenters(int numClusters) const{
+vector<vector<double>> Util::generateRandomCenters(int numClusters) const{
     const auto& dataset = problem.getDataset();
-    int minValue = numeric_limits<int>::max();
-    int maxValue = numeric_limits<int>::min();
+    int variables = problem.getVariables();
+
+    vector<double> minValues(variables, numeric_limits<double>::max());
+    vector<double> maxValues(variables, numeric_limits<double>::lowest());
+
     for(const auto& point : dataset){
-        if(!point.empty()){
-            auto min_it = min_element(point.begin(), point.end());
-            auto max_it = max_element(point.begin(), point.end());
-            if(min_it != point.end()) minValue = min(minValue, *min_it);
-            if(max_it != point.end()) maxValue = max(maxValue, *max_it);
-        }
-    }
-
-    uniform_int_distribution<int> range(minValue, maxValue);
-
-    vector<pair<double, double>> clusterCenters;
-    for(int i = 0; i < numClusters; i++){
-        int x = range(generator);
-        int y = range(generator);
-        clusterCenters.push_back(make_pair(x, y));
-    }
-
-    return clusterCenters;
-}
-
-vector<pair<double, double>> Util::calculateRealClusterCoordinates(int numClusters) const{
-    const auto& coordinates = solution.getClusterCoordinates();
-    vector<pair<double, double>> clusterCenters(numClusters, {0.0, 0.0});
-    for(int c = 0; c < numClusters; c++){ // esto si ya que son todos los clusters
-        int dx = 0.0;
-        int dy = 0.0;
-        for(int i = 0; i < coordinates[c].size(); i++){
-            dx += coordinates[c][i].first;
-            dy += coordinates[c][i].second;
-        }
-        if(coordinates[c].size() > 0){ // evitar division por cero
-            clusterCenters[c].first = dx / coordinates[c].size();
-            clusterCenters[c].second = dy / coordinates[c].size();
-        }else{
-            clusterCenters[c].first = 0.0;
-            clusterCenters[c].second = 0.0;
-        }
-    }
-    return clusterCenters;
-}
-
-double Util::distance(const vector<pair<double, double>>& A, const vector<pair<double, double>>& B) const{
-    if(A.size() != B.size()) return -1.0;
-    // valores maximo y minimo
-    const auto& dataset = problem.getDataset();
-    const auto& var = problem.getVariables(); 
-    vector<pair<int, int>> minMaxValues(var, {numeric_limits<int>::max(), numeric_limits<int>::min()});
-    for(const auto& point : dataset){
-        if(!point.empty()){
-            if(point.size() == var){
-                for(size_t i = 0; i < var; i++){
-                    minMaxValues[i].first = min(minMaxValues[i].first, point[i]);
-                    minMaxValues[i].second = max(minMaxValues[i].second, point[i]);
-                }
+        if(point.size() == variables){
+            for(int d = 0; d < variables; d++){
+                minValues[d] = min(minValues[d], point[d]);
+                maxValues[d] = max(maxValues[d], point[d]);
             }
         }
     }
-    vector<double> ranges(var);
-    for(size_t i = 0; i < var; i++){
-        ranges[i] = minMaxValues[i].second - minMaxValues[i].first;
+
+    vector<uniform_real_distribution<double>> distros;
+    for(int d = 0; d < variables; d++){
+        distros.emplace_back(minValues[d], maxValues[d]);
     }
+
+    vector<vector<double>> clusterCenters(numClusters, vector<double>(variables));
+    for(int i = 0; i < numClusters; i++){
+        for(int d = 0; d < variables; d++){
+            clusterCenters[i][d] = distros[d](generator);
+        }
+    }
+
+    return clusterCenters;
+}
+
+vector<vector<double>> Util::calculateRealClusterCoordinates(int numClusters) const{
+    const auto& coordinates = solution.getClusterCoordinates();
+    int variables = problem.getVariables();
+    vector<vector<double>> clusterCenters(numClusters, vector<double>(variables, 0.0));
+
+    for(int c = 0; c < numClusters; c++){ // esto si ya que son todos los clusters
+        if(coordinates[c].empty()){
+            continue;
+        }
+
+        vector<double> sum(variables, 0.0);
+        for(const auto& point: coordinates[c]){
+            for(int d = 0; d < variables; d++){
+                sum[d] += point[d];
+            }
+        }
+
+        for(int d = 0; d < variables; d++){
+            clusterCenters[c][d] = sum[d] / coordinates[c].size();
+        }
+    }
+    return clusterCenters;
+}
+
+double Util::distance(const vector<vector<double>>& A, const vector<vector<double>>& B) const{
+    if(A.size() != B.size()) return -1.0;
+    
+    int variables = problem.getVariables();
+    if(A.empty() || A[0].size() != variables || B[0].size() != variables) return -1.0;
+
+    const auto& dataset = problem.getDataset();
+    
+    vector<pair<double, double>> minMaxValues(variables, {numeric_limits<double>::max(), numeric_limits<double>::lowest()});
+
+    for(const auto& point : dataset){
+        if(point.size() == variables){
+            for(int d = 0; d < variables; d++){
+                minMaxValues[d].first = min(minMaxValues[d].first, point[d]);
+                minMaxValues[d].second = max(minMaxValues[d].second, point[d]);
+            }
+        }
+    }
+
+    vector<double> ranges(variables);
+    for(int d = 0; d < variables; d++){
+        ranges[d] = minMaxValues[d].second - minMaxValues[d].first;
+        if(ranges[d] == 0) ranges[d] = 1.0;
+    }
+
     double distance = 0.0;
     int D = A.size();
 
-    for(size_t i = 0; i < D; i++){
-        
-
-        double a_first = A[i].first;
-        double b_first = B[i].first;
-
-        double dif_first = (a_first - b_first) / ranges[0];
-        distance += dif_first * dif_first;
-
-        double a_second = A[i].second;
-        double b_second = B[i].second;
-
-        double dif_second = (a_second - b_second) / ranges[1];
-        distance += dif_second * dif_second;
+    for(int i = 0; i < D; i++){
+        for(int d = 0; d < variables; d++){
+            double normalizedDif = (A[i][d] - B[i][d]) / ranges[d];
+            distance += normalizedDif * normalizedDif;
+        }
     }
 
-    return sqrt(distance) / sqrt(D);
+    return sqrt(distance) / sqrt(D * variables);
 }
 
 void Util::printBeforeClusterCenters() const {
     const auto& centers = solution.getBeforeClusterCenters();
+    int variables = problem.getVariables();
     cout << "Centros de clusters (antes de asignacion):" << endl;
     for (int i = 0; i < centers.size(); i++) {
-        cout << "  Cluster " << i << ": (" 
-             << centers[i].first << ", " 
-             << centers[i].second << ")" << endl;
+        cout << "  Cluster " << i << ": (";
+        for(int d = 0; d < variables; d++){
+            cout << fixed << setprecision(2) << centers[i][d];
+            if(d < variables - 1) cout << ", ";
+        }
+        cout << ")" << endl;
     }
 }
 
 void Util::printAfterClusterCenters() const {
     const auto& centers = solution.getAfterClusterCenters();
+    int variables = problem.getVariables();
     cout << "Centros de clusters (despues de asignacion):" << endl;
     for (int i = 0; i < centers.size(); i++) {
-        cout << "  Cluster " << i << ": (" 
-             << fixed << setprecision(2) << centers[i].first << ", " 
-             << fixed << setprecision(2) << centers[i].second << ")" << endl;
+        cout << "  Cluster " << i << ": (";
+        for(int d = 0; d < variables; d++){
+            cout << fixed << setprecision(2) << centers[i][d];
+            if(d < variables - 1) cout << ", ";
+        }
+        cout << ")" << endl;
     }
 }
-
 void Util::printAssignment() const {
     const auto& assignment = solution.getAssignment();
     int numClusters = problem.getNumClusters();
@@ -140,22 +152,29 @@ void Util::printAssignment() const {
 
 void Util::printClusterCoordinates() const {
     const auto& coordinates = solution.getClusterCoordinates();
+    int variables = problem.getVariables();
     cout << "Puntos por cluster:" << endl;
+    
     for (int c = 0; c < coordinates.size(); c++) {
         cout << "  Cluster " << c << " (" << coordinates[c].size() << " puntos):" << endl;  
+        
         // Limitar la salida si hay muchos puntos
         const int max_points_to_show = 5;
         for (int i = 0; i < min(max_points_to_show, (int)coordinates[c].size()); i++) {
-            cout << "    (" << coordinates[c][i].first << ", " 
-                 << coordinates[c][i].second << ")" << endl;
+            cout << "    (";
+            for(int d = 0; d < variables; d++){
+                cout << coordinates[c][i][d];
+                if(d < variables - 1) cout << ", ";
+            }
+            cout << ")" << endl;
         }
+        
         if (coordinates[c].size() > max_points_to_show) {
             cout << "    ... y " << (coordinates[c].size() - max_points_to_show) 
                  << " puntos mas" << endl;
         }
     }
 }
-
 void Util::printClusterValues() const {
     const auto& values = solution.getClusterValues();
     cout << "Valores de fitness por cluster:" << endl;

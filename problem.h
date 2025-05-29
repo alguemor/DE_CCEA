@@ -17,10 +17,10 @@ private:
     // almacenamiento datos
     int numClusters;
     vector<int> limClusters;
-    vector<vector<int>> dataset;
+    vector<vector<double>> dataset;
     int points;
     int variables;
-    vector<vector<pair<int, int>>> coordinates;
+    vector<vector<vector<double>>> coordinates;
     // metodos auxiliares
     void loadClusters();
     void loadDataset();
@@ -33,26 +33,26 @@ public:
     // metodos almacenamiento
     int getNumClusters() const;
     const vector<int>& getLimClusters() const;
-    const vector<vector<int>>& getDataset() const;
+    const vector<vector<double>>& getDataset() const;
     int getPoints() const;
     int getVariables() const;
-    const vector<vector<pair<int, int>>>& getClustersCoordinates() const;
+    const vector<vector<vector<double>>>& getClustersCoordinates() const;
     // metodos impresion
     void printVector1D(const vector<int>& vector) const;
-    void printVector2D(const vector<vector<int>>& vector) const;
+    void printVector2D(const vector<vector<double>>& vector) const;
     // metodo carga dataset
     void loadData();
     // metodos de evaluacion
-    vector<vector<pair<int, int>>> calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const;
-    vector<double> calculateClusterValues(const vector<vector<pair<int, int>>>& coordinates) const;
+    vector<vector<vector<double>>> calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const;
+    vector<double> calculateClusterValues(const vector<vector<vector<double>>>& coordinates) const;
     double calculateFitness(const vector<double>& clusterValues) const;
     // evaluacion completa
     double evaluateSolution(const vector<int>& assignment,
-                            vector<vector<pair<int, int>>>& coordinates,
+                            vector<vector<vector<double>>>& coordinates,
                             vector<double>& clusterValues) const;
     // metodo distancia entre vectores de soluciones de clusters
-    double distance(const vector<vector<pair<double, double>>>& vectorA,
-                    const vector<vector<pair<double, double>>>& vectorB) const;
+    double distance(const vector<vector<vector<double>>>& vectorA,
+                    const vector<vector<vector<double>>>& vectorB) const;
 };
 
 #endif

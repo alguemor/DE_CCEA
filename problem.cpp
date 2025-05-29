@@ -28,7 +28,7 @@ void Problem::loadDataset(){
     fileDataset >> points;
     fileDataset >> variables;
     dataset.clear();
-    dataset.resize(points, vector<int>(variables, 0));
+    dataset.resize(points, vector<double>(variables, 0.0));
     for(int i = 0; i < points; i++){
         for(int j = 0; j < variables; j++){
             fileDataset >> dataset[i][j];
@@ -55,7 +55,7 @@ const vector<int>& Problem::getLimClusters() const{
     return limClusters;
 }
 
-const vector<vector<int>>& Problem::getDataset() const{
+const vector<vector<double>>& Problem::getDataset() const{
     return dataset;
 }
 
@@ -67,24 +67,28 @@ int Problem::getVariables() const{
     return variables;
 }
 // fitness
-vector<vector<pair<int, int>>> Problem::calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const{
+vector<vector<vector<double>>> Problem::calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const{
     int numClusters = getNumClusters();
-    vector<vector<pair<int, int>>> coordinates(numClusters);
+    vector<vector<vector<double>>> coordinates(numClusters);
+    
     if(assignment.size() != points){
         return coordinates;
     }
+
     for(int i = 0; i < assignment.size(); i++){
         int cluster = assignment[i];
         if(cluster >= 0 && cluster < numClusters){
-            int x = dataset[i][0];
-            int y = dataset[i][1];
-            coordinates[cluster].push_back(make_pair(x, y));
+            vector<double> point(variables);
+            for(int d = 0; d < variables; d++){
+                point[d] = dataset[i][d];
+            }
+            coordinates[cluster].push_back(point);
         }
     }
     return coordinates;
 }
 
-vector<double> Problem::calculateClusterValues(const vector<vector<pair<int, int>>>& coordinates) const{
+vector<double> Problem::calculateClusterValues(const vector<vector<vector<double>>>& coordinates) const{
     int numClusters = getNumClusters();
     vector<double> values(numClusters, 0.0);
     for(int c = 0; c < numClusters; c++){
@@ -92,13 +96,12 @@ vector<double> Problem::calculateClusterValues(const vector<vector<pair<int, int
         double sumDistances = 0.0;
         for(int i = 0; i < coordinates[c].size(); i++){
             for(int j = i + 1; j < coordinates[c].size(); j++){
-                int x1 = coordinates[c][i].first;
-                int y1 = coordinates[c][i].second;
-                int x2 = coordinates[c][j].first;
-                int y2 = coordinates[c][j].second;
-                int dx = x2 - x1;
-                int dy = y2 - y1;
-                double distance = sqrt(dx*dx + dy*dy);
+                double distance = 0.0;
+                for(int d = 0; d < variables; d++){
+                    double dif = coordinates[c][j][d] - coordinates[c][i][d];
+                    distance += dif*dif;
+                }
+                distance = sqrt(distance);
                 sumDistances += distance;
             }
         }
@@ -116,7 +119,7 @@ double Problem::calculateFitness(const vector<double>& clusterValues) const {
 }
 
 double Problem::evaluateSolution(const vector<int>& assignment,
-                                vector<vector<pair<int, int>>>& coordinates,
+                                vector<vector<vector<double>>>& coordinates,
                                 vector<double>& clusterValues) const{
     coordinates = calculatePointsCoordinatesPerCluster(assignment);
     clusterValues = calculateClusterValues(coordinates);
@@ -132,7 +135,7 @@ void Problem::printVector1D(const vector<int>& vector) const{
     cout << "]" << endl;
 }
 
-void Problem::printVector2D(const vector<vector<int>>& vector) const{
+void Problem::printVector2D(const vector<vector<double>>& vector) const{
     cout << "[" << endl;
     for(size_t i = 0; i < vector.size(); i++){
         cout << "  [";
