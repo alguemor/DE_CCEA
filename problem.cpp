@@ -93,23 +93,19 @@ vector<double> Problem::calculateClusterValues(const vector<vector<vector<double
     vector<double> values(numClusters, 0.0);
     for(int c = 0; c < numClusters; c++){
         if(coordinates[c].empty()) continue;
-        double sumDistances = 0.0;
-        for(int i = 0; i < coordinates[c].size(); i++){
-            for(int j = i + 1; j < coordinates[c].size(); j++){
-                double distance = 0.0;
+        double sumSquaredDistances = 0.0;
+        int clusterSize = coordinates[c].size();
+        for(int i = 0; i < clusterSize; i++){
+            for(int j = 0; j < clusterSize; j++){
+                double squaredDistance = 0.0;
                 for(int d = 0; d < variables; d++){
-                    double dif = coordinates[c][j][d] - coordinates[c][i][d];
-                    distance += dif*dif;
+                    double dif = coordinates[c][i][d] - coordinates[c][j][d];
+                    squaredDistance += dif*dif;
                 }
-                distance = sqrt(distance);
-                sumDistances += distance;
+                sumSquaredDistances += squaredDistance;
             }
         }
-        if(coordinates[c].size() > 0){ // evitar division por cero
-            values[c] = sumDistances / coordinates[c].size();
-        }else{
-            values[c] = 0.0;
-        }
+        values[c] = 0.5 * sumSquaredDistances / clusterSize; 
     }
     return values;
 }
@@ -123,8 +119,19 @@ double Problem::evaluateSolution(const vector<int>& assignment,
                                 vector<double>& clusterValues) const{
     coordinates = calculatePointsCoordinatesPerCluster(assignment);
     clusterValues = calculateClusterValues(coordinates);
-    return calculateFitness(clusterValues);
-                                }
+    double fitness = calculateFitness(clusterValues);
+    
+    // DEBUG: Detalles del fitness
+    //cout << "=== DEBUG FITNESS ===" << endl;
+    //for(int c = 0; c < clusterValues.size(); c++) {
+    //    cout << "Cluster " << c << ": " << coordinates[c].size() 
+    //         << " puntos, valor: " << clusterValues[c] << endl;
+    //}
+    //cout << "Fitness total: " << fitness << endl;
+    //cout << "===================" << endl;
+    
+    return fitness;
+}
 
 void Problem::printVector1D(const vector<int>& vector) const{
     cout << "[";

@@ -18,12 +18,24 @@ Fitness DIVERSITY::run() {
   initializeParameters();
   setSHADEParameters();
   //External variable...	
-  ofstream outFitness, outVar;
+  ofstream outFitness;
   //Fitness....
   char fitnessName[500];
   strcpy(fitnessName, g_fileName);
   strcat(fitnessName, "_F");	
   outFitness.open(fitnessName, ios::out);
+  //Dat
+  //char varname[500];
+  //strcpy(varName, g_fileName);
+  //strcat(varname, "_dat");
+  //outVar.pen(varName, ios::out);
+    //results directory - create if not exists
+    //string fileName_str(g_fileName);
+    //size_t lastSlash = fileName_str.find_last_of('/');
+    //if(lastSlash != string::npos){
+    //    string directory = fileName_str.substr(0, lastSlash);
+    //    mkdir(directory.c_str(), 0755);
+    //}
 
   vector <Individual> pop;
   vector <Fitness> fitness(pop_size, 10);
@@ -37,9 +49,21 @@ Fitness DIVERSITY::run() {
 
   //initialize pop, children and elite..
   for (int i = 0; i < pop_size; i++) {
-    pop.push_back(makeNewIndividual());
-    children.push_back((variable*)malloc(sizeof(variable) * problem_size));
-    elite.push_back((variable*)malloc(sizeof(variable) * problem_size));
+        Individual newInd = makeNewIndividual();
+        if(newInd == nullptr){
+            return -1;
+        }
+        pop.push_back(newInd);
+        Individual newChild = (variable*)malloc(sizeof(variable) * problem_size);
+        if(newChild == nullptr){
+            return -1;        
+        }
+        children.push_back(newChild);
+        Individual newElite = (variable*)malloc(sizeof(variable) * problem_size);
+        if(newElite == nullptr){
+            return -1;
+        }
+        elite.push_back(newElite);
   }
   if(g_clusteringBridge !=  nullptr){
     g_clusteringBridge->getNumClusters();
@@ -67,7 +91,7 @@ Fitness DIVERSITY::run() {
   for (int i = 0; i < pop_size; i++) {
     nfes++;
 
-    if ((fitness[i] - optimum) < epsilon) fitness[i] = optimum;
+    //if ((fitness[i] - optimum) < epsilon) fitness[i] = optimum;
 
 
     if (fitness[i] < bsf_fitness) {
@@ -136,7 +160,7 @@ Fitness DIVERSITY::run() {
      {
         nfes++;
 
-       if ((elite_fitness[i] - optimum) < epsilon) elite_fitness[i] = optimum;
+       //if ((elite_fitness[i] - optimum) < epsilon) elite_fitness[i] = optimum;
 
         if (elite_fitness[i] < bsf_fitness) 
         {
@@ -164,8 +188,8 @@ Fitness DIVERSITY::run() {
 
     }
 
-	double percent = 0.01;
-	static vector<bool> report( 1.0/percent + 5, false);
+	//double percent = 0.01;
+	//static vector<bool> report( 1.0/percent + 5, false);
 	/*for(double l = 0, z = 0 ; l < 1.0; l+=percent, z++)
 	{
         if(  nfes > (int)(l*max_num_evaluations) && !report[z] )
@@ -204,35 +228,42 @@ Fitness DIVERSITY::run() {
   {
 
 	//print the last population information.....
-		for(int k = 0 ; k < problem_size; k++)
+		/*for(int k = 0 ; k < problem_size; k++)
 		  outVar << pop[i][k] << " ";
 		for(int k = 0 ; k < problem_size; k++)
 		  outVar << children[i][k] << " ";
 		for(int k = 0 ; k < problem_size; k++)
 		  outVar << elite[i][k] << " ";
-		outVar << endl;
+		outVar << endl;*/
 		
-	    free(pop[i]); 
-	    free(children[i]); 
-	    free(elite[i]);
+	    if(pop[i]) free(pop[i]); 
+	    if(children[i]) free(children[i]); 
+	    if(elite[i]) free(elite[i]);
+  
   }
-        outFitness << bsf_fitness<< " ";
-        for(int k = 0 ; k < problem_size; k++)
-	 outFitness << bsf_solution[k] << " ";
+  
+    if(outFitness.is_open()){
+        outFitness << bsf_fitness << " ";
+        for(int k = 0; k < problem_size; k++){
+            outFitness << bsf_solution[k] << " ";
+        }
+        outFitness.close();
+    }
 
-
-  pop.clear(); 
-  children.clear(); 
-  fitness.clear();
-  elite.clear();
-  children_fitness.clear();
-  free(bsf_solution);
+    pop.clear(); 
+    children.clear(); 
+    fitness.clear();
+    elite.clear();
+    children_fitness.clear();
+    free(bsf_solution);
+    free(pop_sf);
+    free(pop_cr);
 
   ////sorted_array.clear();
   //free(sorted_array);
   //free(temp_fit); //.clear();
-
-  return bsf_fitness - optimum;
+    cout << bsf_fitness << endl;
+    return bsf_fitness - optimum;
 }
 
 

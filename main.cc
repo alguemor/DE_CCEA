@@ -38,48 +38,53 @@ double g_Di;
 
 ClusteringBridge* g_clusteringBridge = nullptr;
 
-//.Exec path sed n_problem dimension popsize Di
+//.Exec sed problem Di
 int main(int argc, char **argv) {
  
-  int sed = atoi(argv[1]);
-  std::string datasetName = argv[2];
-  //available number of fitness evaluations 
-  g_max_num_evaluations = 25000;
+    int sed = atoi(argv[1]);
+    std::string datasetName = argv[2];
+    //available number of fitness evaluations 
+    g_max_num_evaluations = 25000;
 
-  g_pop_size = 10000;// (int)round(sqrt(g_problem_size) * log(g_problem_size) * 25);
+    // raw data: Record function error value (Fi(x)-Fi(x*)) after (0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)*MaxFES for each run.
+    double di = atof(argv[3]);
 
- // raw data: Record function error value (Fi(x)-Fi(x*)) after (0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)*MaxFES for each run.
-  double di = atof(argv[3]);
+    DatasetManager datasetManager;
+    if(!datasetManager.datasetExists(datasetName)){
+        std::cerr << "Error: dataset no existe\n";
+        return 1;
+    }
 
-  DatasetManager datasetManager;
-   if(!datasetManager.datasetExists(datasetName)){
-     std::cerr << "Error: dataset no existe\n";
-     return 1;
-  }
+    DatasetInfo datasetInfo = datasetManager.getDatasetInfo(datasetName);
 
-  DatasetInfo datasetInfo = datasetManager.getDatasetInfo(datasetName);
+    g_clusteringBridge = new ClusteringBridge(datasetInfo.pointsFile, datasetInfo.clustersFile);
 
-  g_clusteringBridge = new ClusteringBridge(datasetInfo.pointsFile, datasetInfo.clustersFile);
+    int numClusters = g_clusteringBridge->getNumClusters();
+    int variables = g_clusteringBridge->getDimension();
+    g_problem_size = numClusters * variables;
+    
+    //g_pop_size = 10000;
+    g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
+    //std::cout << g_pop_size << std::endl;
 
-  g_problem_size = g_clusteringBridge->getNumClusters() * g_clusteringBridge->getDimension();
+    srand(sed);
 
-  srand(sed);
+    //g_function_number = 1;
+    g_Di = sqrt(g_problem_size)*di;
 
-  g_function_number = 1;
-  g_Di = sqrt(g_problem_size)*di;
+    sprintf(g_fileName, "results/%s/s%d_p%d", datasetName.c_str(), sed, g_problem_size);
 
-  sprintf(g_fileName, "results/%s/s%d_p%d", datasetName.c_str(), sed, g_problem_size);
+    searchAlgorithm *alg = new DIVERSITY();
+    outFile << alg->run();
+    delete alg;
 
-  searchAlgorithm *alg = new DIVERSITY();
-  outFile << alg->run();
-  delete alg;
-
- //free memory of the benchmark
-		free(M);
+    //free memory of the benchmark
+	    delete g_clusteringBridge;
+        free(M);
 		free(OShift);
 		free(y);
 		free(z);
 		free(x_bound);
-  return 0;
+    return 0;
 }
 

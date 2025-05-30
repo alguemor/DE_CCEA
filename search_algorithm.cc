@@ -33,7 +33,7 @@ void searchAlgorithm::initializeFitnessFunctionParameters() {
   max_region = 100.0;
   min_region = -100.0;
 
-  optimum = function_number * 100;
+  optimum = 0.0;
 }
 
 //set best solution (bsf_solution) and its fitness value (bsf_fitness) in the initial population
@@ -57,33 +57,34 @@ Individual searchAlgorithm::makeNewIndividual() {
   Individual individual = (variable*)malloc(sizeof(variable) * problem_size);
 
   if (g_clusteringBridge != nullptr) {
-    const auto* problem = g_clusteringBridge->getProblem();
-    const auto& dataset = problem->getDataset();
-    
-    int minX = INT_MAX, minY = INT_MAX;
-    int maxX = INT_MIN, maxY = INT_MIN;
-    
-    for (const auto& point : dataset) {
-      if (point.size() >= 2) {
-        minX = std::min(minX, point[0]);
-        minY = std::min(minY, point[1]);
-        maxX = std::max(maxX, point[0]);
-        maxY = std::max(maxY, point[1]);
-      }
-    }
-    
-    int numClusters = problem_size / 2;
-    for (int i = 0; i < numClusters; i++) {
-      individual[i * 2] = minX + randDouble() * (maxX - minX);
-      individual[i * 2 + 1] = minY + randDouble() * (maxY - minY);
-    }
-  } else {
-    for (int i = 0; i < problem_size; i++) {
-      individual[i] = ((max_region - min_region) * randDouble()) + min_region;
-    }
-  }
+        const auto* problem = g_clusteringBridge->getProblem();
+        const auto& dataset = problem->getDataset();
+        int variables = problem->getVariables();
+        int numClusters = problem->getNumClusters();
 
-  return individual;
+        vector<double> minVals(variables, numeric_limits<double>::max());
+        vector<double> maxVals(variables, numeric_limits<double>::lowest());
+        for(const auto& point : dataset){
+            if(point.size() == variables){
+                for(int d = 0; d < variables; d++){
+                    minVals[d] = std::min(minVals[d], point[d]);
+                    maxVals[d] = std::max(maxVals[d], point[d]);                       }
+            }
+        }
+
+        for(int c = 0; c < numClusters; c++) {
+            for(int d = 0; d < variables; d++){
+                int index = c * variables + d;
+                individual[index] = minVals[d] + randDouble() * (maxVals[d] - minVals[d]);
+            }
+        }
+    } else {
+        for (int i = 0; i < problem_size; i++) {
+            individual[i] = ((max_region - min_region) * randDouble()) + min_region;
+        }
+    }
+
+    return individual;
 }
 
 /*

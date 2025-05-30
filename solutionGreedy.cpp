@@ -10,7 +10,7 @@ Solution::Solution(Problem& prob) : problem(prob), fitness(0.0), clusterCoordina
     int numPoints = problem.getPoints();
     int variables = problem.getVariables();
     distances.resize(numPoints, vector<double>(numClusters, 0.0));
-    assignment.resize(numPoints, 0);
+    assignment.resize(numPoints, -1);
     clusterLimits = problem.getLimClusters();
     clusterValues.resize(numClusters, 0.0);
     clusterCoordinates.resize(numClusters);
@@ -59,8 +59,16 @@ void Solution::sortDistances(){
 void Solution::greedy(){
     int numPoints = problem.getPoints();
 
-    fill(assignment.begin(), assignment.end(), 0);
+    fill(assignment.begin(), assignment.end(), -1);
     clusterLimits = problem.getLimClusters();
+
+    // DEBUG: Estado inicial
+    //cout << "=== DEBUG GREEDY ===" << endl;
+    //cout << "Limites iniciales: ";
+    //for(int i = 0; i < clusterLimits.size(); i++) {
+    //    cout << "C" << i << ":" << clusterLimits[i] << " ";
+    //}
+    //cout << endl;
 
     if(allDistances.empty()){
         sortDistances();
@@ -69,12 +77,30 @@ void Solution::greedy(){
     for(const auto& dist_tuple : allDistances){
         int point_id = std::get<0>(dist_tuple);
         int center_id = std::get<1>(dist_tuple);
-        if(assignment[point_id] != 0) continue;
+        if(assignment[point_id] != -1) continue;
         if(clusterLimits[center_id] > 0){
             assignment[point_id] = center_id;
             clusterLimits[center_id]--;
         }
     }
+
+    // DEBUG: Conteo final
+    //vector<int> count(problem.getNumClusters(), 0);
+    //int unassigned = 0;
+    //for(int i = 0; i < assignment.size(); i++) {
+    //    if(assignment[i] == -1) {
+    //        unassigned++;
+    //    } else {
+    //        count[assignment[i]]++;
+    //    }
+    //}
+
+    //cout << "Asignacion final: ";
+    //for(int i = 0; i < count.size(); i++) {
+    //    cout << "C" << i << ":" << count[i] << " ";
+    //}
+    //cout << "Sin asignar: " << unassigned << endl;
+    //cout << "===================" << endl;
 
     clusterCoordinatesUpdated = false;
 }

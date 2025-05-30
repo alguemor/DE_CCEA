@@ -1,6 +1,7 @@
 #include "bridge.h"
+using namespace std;
 
-ClusteringBridge::ClusteringBridge(const std::string& datasetFile, const std::string& clustersFile) {
+ClusteringBridge::ClusteringBridge(const string& datasetFile, const string& clustersFile) {
     problem = new Problem(datasetFile, clustersFile);
     problem->loadData();
 }
@@ -15,13 +16,16 @@ void ClusteringBridge::individualToSolution(Individual individual, Solution*& so
     }
     
     int numClusters = problem->getNumClusters();
+    int variables = problem->getVariables();
     
     // Convertir el individuo a centros de clusters
     solution->beforeClusterCenters.clear();
+    solution->beforeClusterCenters.resize(numClusters, vector<double>(variables));
+
     for (int i = 0; i < numClusters; i++) {
-        double x = individual[i * 2];
-        double y = individual[i * 2 + 1];
-        solution->beforeClusterCenters.push_back(std::make_pair(x, y));    
+        for(int d = 0; d < variables; d++){
+            solution->beforeClusterCenters[i][d] = individual[i * variables + d];
+        } 
     }
     
     // calcular distancias desde cada punto a los centros
@@ -39,6 +43,8 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual) {
 
     Fitness fitness = solution->getFitness();
     
+    //cout << fitness << endl;
+
     delete solution;
     return fitness;
 }
