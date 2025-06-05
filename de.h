@@ -20,9 +20,9 @@
 
 using namespace std;
 
-typedef  double variable;
+typedef double variable;
 typedef variable *Individual;
-typedef  double Fitness;
+typedef double Fitness;
 
 extern int g_function_number;
 extern int g_problem_size;
@@ -119,6 +119,11 @@ protected:
   Fitness epsilon;
   unsigned int max_num_evaluations;
   int pop_size;
+  // dimension ranges
+  vector<double> min_bounds_per_dim;
+  vector<double> max_bounds_per_dim;
+  int variables_per_cluster;
+  int num_clusters;
 };
 
 class DIVERSITY: public searchAlgorithm {

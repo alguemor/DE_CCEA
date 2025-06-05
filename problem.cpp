@@ -105,6 +105,7 @@ vector<double> Problem::calculateClusterValues(const vector<vector<vector<double
                 sumSquaredDistances += squaredDistance;
             }
         }
+        
         values[c] = 0.5 * sumSquaredDistances / clusterSize; 
     }
     return values;

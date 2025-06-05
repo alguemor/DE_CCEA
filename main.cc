@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
     int variables = g_clusteringBridge->getDimension();
     g_problem_size = numClusters * variables;
     
-    //g_pop_size = 10000;
-    g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
+    g_pop_size = 10000;
+    //g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
     //std::cout << g_pop_size << std::endl;
 
     srand(sed);

@@ -4,10 +4,12 @@
 #include "de.h"
 #include "problem.h"
 #include "solutionGreedy.h"
+#include "util.h"
 
 class ClusteringBridge {
 private:
     Problem* problem;
+    vector<vector<double>> bestAfterCenters;
     
 public:
     ClusteringBridge(const std::string& datasetFile, const std::string& clustersFile);
@@ -26,6 +28,9 @@ public:
     
     // Acceso al problema
     Problem* getProblem() const { return problem; }
+
+    const vector<vector<double>>& getBestAfterCenters() const;
+    void setBestAfterCenters(const vector<vector<double>>& centers);
 };
 
 #endif

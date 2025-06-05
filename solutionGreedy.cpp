@@ -117,7 +117,10 @@ void Solution::updateEvaluation(){
 
 void Solution::solveGreedy(){
     Util util(problem, *this); // crea instancia de Util
-    beforeClusterCenters = util.generateRandomCenters(problem.getNumClusters());
+
+    if(beforeClusterCenters.empty() || beforeClusterCenters[0].empty()){
+        beforeClusterCenters = util.generateRandomCenters(problem.getNumClusters());
+    }
 
     calculateDistances();
     sortDistances();
