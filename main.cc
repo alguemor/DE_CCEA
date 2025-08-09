@@ -80,7 +80,10 @@ int main(int argc, char **argv) {
     outFile.open(outputFileName, ios::out);
 
     searchAlgorithm *alg = new DIVERSITY();
-    outFile << alg->run() << endl;
+    alg->run();
+    
+    // Output comprehensive solution information
+    g_clusteringBridge->outputComprehensiveSolution(outFile);
     delete alg;
 
     // Close output file
