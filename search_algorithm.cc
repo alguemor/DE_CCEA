@@ -37,7 +37,7 @@ void searchAlgorithm::initializeFitnessFunctionParameters() {
         int variables = problem->getVariables();
         
         variables_per_cluster = variables;
-        num_clusters = problem->getVariables();
+        num_clusters = problem->getNumClusters();
 
         min_bounds_per_dim.resize(variables);
         max_bounds_per_dim.resize(variables);
@@ -49,8 +49,8 @@ void searchAlgorithm::initializeFitnessFunctionParameters() {
 
         for(const auto& point : dataset){
             for(int d = 0; d < variables; d++){
-                min_bounds_per_dim[d] = min(min_bounds_per_dim[d], point[d]);
-                max_bounds_per_dim[d] = max(max_bounds_per_dim[d], point[d]);
+                min_bounds_per_dim[d] = min(min_bounds_per_dim[d], (double)point[d]);
+                max_bounds_per_dim[d] = max(max_bounds_per_dim[d], (double)point[d]);
             }
         }
     
@@ -114,8 +114,8 @@ Individual searchAlgorithm::makeNewIndividual() {
             
             for(const auto& point : dataset){
                 for(int d = 0; d < variables; d++){
-                    minVals[d] = min(minVals[d], point[d]);
-                    maxVals[d] = max(maxVals[d], point[d]);
+                    minVals[d] = min(minVals[d], (double)point[d]);
+                    maxVals[d] = max(maxVals[d], (double)point[d]);
                 }
             }
 

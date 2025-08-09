@@ -322,7 +322,7 @@ void DIVERSITY::replacement(vector<Individual> &pop, vector<Fitness> &fitness, v
 {
   priority_queue < pair <Fitness, Individual> > pq;
   vector<Individual> penalized;
-  vector< vector<double> > survivors;
+  vector< vector<long double> > survivors;
   vector<Fitness> survivors_fitness, penalized_fitness;
   for(int i = 0 ; i < pop.size(); i++)
   {

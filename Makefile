@@ -4,7 +4,7 @@ TARGET = DE_CCEA_exe
 OBJS := $(patsubst %.cc,%.o,$(wildcard *.cc)) \
     problem.o solutionGreedy.o util.o dataset_manager.o bridge.o
 CC = g++
-OPTION = -Ofast -march=native
+OPTION = -Ofast -march=native -D_GLIBCXX_USE_C99_MATH_TR1
 
 $(TARGET): $(OBJS)
 	$(CC) -o $(TARGET) $(OBJS) $(OPTION) -lm 

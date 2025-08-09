@@ -11,8 +11,8 @@ using namespace std;
 class Solution{
 private:
     Problem& problem;
-    vector<vector<double>> distances;
-    vector<tuple<int, int, double>> allDistances;
+    vector<vector<long double>> distances;
+    vector<tuple<int, int, long double>> allDistances;
     vector<int> clusterLimits;
     bool clusterCoordinatesUpdated; // flag coordenadas actualizadas
 
@@ -20,18 +20,18 @@ public:
     Solution(Problem& prob);
     ~Solution();
 
-    vector<vector<double>> beforeClusterCenters;
+    vector<vector<long double>> beforeClusterCenters;
     // centros despues de asignacion
-    vector<vector<double>> afterClusterCenters;
+    vector<vector<long double>> afterClusterCenters;
     vector<int> assignment;
     // cache en Solution, logica en Problem
-    vector<vector<vector<double>>> clusterCoordinates;
-    vector<double> clusterValues;
-    double fitness;
-    double distance;
+    vector<vector<vector<long double>>> clusterCoordinates;
+    vector<long double> clusterValues;
+    long double fitness;
+    long double distance;
 
     void greedy();
-    const vector<vector<vector<double>>>& getClusterCoordinates(); // flag
+    const vector<vector<vector<long double>>>& getClusterCoordinates(); // flag
  
     void calculateDistances();
     void sortDistances();
@@ -41,15 +41,15 @@ public:
     void updateEvaluation();
     void solveGreedy();
     // getters
-    const vector<vector<double>>& getBeforeClusterCenters() const;
-    const vector<vector<vector<double>>>& getClusterCoordinates() const;
+    const vector<vector<long double>>& getBeforeClusterCenters() const;
+    const vector<vector<vector<long double>>>& getClusterCoordinates() const;
     const vector<int>& getAssignment() const;
-    const vector<double>& getClusterValues() const;
-    double getFitness() const;
+    const vector<long double>& getClusterValues() const;
+    long double getFitness() const;
 
-    const vector<vector<double>>& getAfterClusterCenters() const;
+    const vector<vector<long double>>& getAfterClusterCenters() const;
     // distancia
-    double getDistance() const;
+    long double getDistance() const;
 };
 
 #endif

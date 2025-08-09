@@ -19,10 +19,10 @@ public:
     Util(const Problem& prob, const Solution&sol);
     ~Util();
     // numeros / centros aleatorios
-    vector<vector<double>> generateRandomCenters(int numClusters) const;
-    vector<vector<double>> calculateRealClusterCoordinates(int numClusters) const;
+    vector<vector<long double>> generateRandomCenters(int numClusters) const;
+    vector<vector<long double>> calculateRealClusterCoordinates(int numClusters) const;
     // distancia entre centros
-    double distance(const vector<vector<double>>& A, const vector<vector<double>>& B) const;
+    long double distance(const vector<vector<long double>>& A, const vector<vector<long double>>& B) const;
     void printDistance() const;
     // impresiones
     void printBeforeClusterCenters() const;

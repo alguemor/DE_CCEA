@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     int sed = atoi(argv[1]);
     std::string datasetName = argv[2];
     //available number of fitness evaluations 
-    g_max_num_evaluations = 25000;
+    g_max_num_evaluations = 1000; // Reduced for testing
 
     // raw data: Record function error value (Fi(x)-Fi(x*)) after (0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)*MaxFES for each run.
     double di = atof(argv[3]);
@@ -63,8 +63,8 @@ int main(int argc, char **argv) {
     int variables = g_clusteringBridge->getDimension();
     g_problem_size = numClusters * variables;
     
-    g_pop_size = 10000;
-    //g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
+    //g_pop_size = 10000;
+    g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
     //std::cout << g_pop_size << std::endl;
 
     srand(sed);
@@ -74,9 +74,17 @@ int main(int argc, char **argv) {
 
     sprintf(g_fileName, "results/%s/s%d_p%d", datasetName.c_str(), sed, g_problem_size);
 
+    // Open output file for writing the final result
+    char outputFileName[1000];
+    sprintf(outputFileName, "%s_result.txt", g_fileName);
+    outFile.open(outputFileName, ios::out);
+
     searchAlgorithm *alg = new DIVERSITY();
-    outFile << alg->run();
+    outFile << alg->run() << endl;
     delete alg;
+
+    // Close output file
+    outFile.close();
 
     //free memory of the benchmark
 	    delete g_clusteringBridge;

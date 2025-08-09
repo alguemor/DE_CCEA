@@ -9,7 +9,7 @@
 class ClusteringBridge {
 private:
     Problem* problem;
-    vector<vector<double>> bestAfterCenters;
+    vector<vector<long double>> bestAfterCenters;
     
 public:
     ClusteringBridge(const std::string& datasetFile, const std::string& clustersFile);
@@ -29,8 +29,8 @@ public:
     // Acceso al problema
     Problem* getProblem() const { return problem; }
 
-    const vector<vector<double>>& getBestAfterCenters() const;
-    void setBestAfterCenters(const vector<vector<double>>& centers);
+    const vector<vector<long double>>& getBestAfterCenters() const;
+    void setBestAfterCenters(const vector<vector<long double>>& centers);
 };
 
 #endif

@@ -28,7 +28,7 @@ void Problem::loadDataset(){
     fileDataset >> points;
     fileDataset >> variables;
     dataset.clear();
-    dataset.resize(points, vector<double>(variables, 0.0));
+    dataset.resize(points, vector<long double>(variables, 0.0L));
     for(int i = 0; i < points; i++){
         for(int j = 0; j < variables; j++){
             fileDataset >> dataset[i][j];
@@ -55,7 +55,7 @@ const vector<int>& Problem::getLimClusters() const{
     return limClusters;
 }
 
-const vector<vector<double>>& Problem::getDataset() const{
+const vector<vector<long double>>& Problem::getDataset() const{
     return dataset;
 }
 
@@ -67,9 +67,9 @@ int Problem::getVariables() const{
     return variables;
 }
 // fitness
-vector<vector<vector<double>>> Problem::calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const{
+vector<vector<vector<long double>>> Problem::calculatePointsCoordinatesPerCluster(const vector<int>& assignment) const{
     int numClusters = getNumClusters();
-    vector<vector<vector<double>>> coordinates(numClusters);
+    vector<vector<vector<long double>>> coordinates(numClusters);
     
     if(assignment.size() != points){
         return coordinates;
@@ -78,7 +78,7 @@ vector<vector<vector<double>>> Problem::calculatePointsCoordinatesPerCluster(con
     for(int i = 0; i < assignment.size(); i++){
         int cluster = assignment[i];
         if(cluster >= 0 && cluster < numClusters){
-            vector<double> point(variables);
+            vector<long double> point(variables);
             for(int d = 0; d < variables; d++){
                 point[d] = dataset[i][d];
             }
@@ -88,39 +88,67 @@ vector<vector<vector<double>>> Problem::calculatePointsCoordinatesPerCluster(con
     return coordinates;
 }
 
-vector<double> Problem::calculateClusterValues(const vector<vector<vector<double>>>& coordinates) const{
+vector<long double> Problem::calculateClusterValues(const vector<vector<vector<long double>>>& coordinates) const{
     int numClusters = getNumClusters();
-    vector<double> values(numClusters, 0.0);
+    vector<long double> values(numClusters, 0.0L);
     for(int c = 0; c < numClusters; c++){
         if(coordinates[c].empty()) continue;
-        double sumSquaredDistances = 0.0;
+        
+        long double c_error = 0.0L; // kahan sum
+        long double sumSquaredDistances = 0.0L;
         int clusterSize = coordinates[c].size();
         for(int i = 0; i < clusterSize; i++){
             for(int j = 0; j < clusterSize; j++){
-                double squaredDistance = 0.0;
+                
+                long double dist_error = 0.0L; // kahan sum
+                long double squaredDistance = 0.0L;
                 for(int d = 0; d < variables; d++){
-                    double dif = coordinates[c][i][d] - coordinates[c][j][d];
-                    squaredDistance += dif*dif;
+                    long double dif = coordinates[c][i][d] - coordinates[c][j][d];
+                    // kahan sum
+                    long double term = dif * dif;
+                    long double y = term - dist_error;
+                    long double t = squaredDistance + y;
+                    dist_error = (t - squaredDistance) - y;
+
+                    squaredDistance = t;
                 }
-                sumSquaredDistances += squaredDistance;
+                // kahan sum
+                long double y = squaredDistance - c_error;
+                long double t = sumSquaredDistances + y;
+                c_error = (t - sumSquaredDistances) - y;
+                sumSquaredDistances = t;
+                //sumSquaredDistances += squaredDistance;
             }
         }
         
-        values[c] = 0.5 * sumSquaredDistances / clusterSize; 
+        values[c] = 0.5L * sumSquaredDistances / (long double)clusterSize; 
     }
     return values;
 }
 
-double Problem::calculateFitness(const vector<double>& clusterValues) const {
-    return accumulate(clusterValues.begin(), clusterValues.end(), 0.0);
+long double Problem::calculateFitness(const vector<long double>& clusterValues) const {
+    // kahan sum
+    long double sum = 0.0L;
+    long double c = 0.0L;
+
+    for(const auto& val : clusterValues){
+        long double y = val - c;
+        long double t = sum + y;
+        c = (t - sum) - y;
+        sum = t;
+    }
+
+    return sum;
+
+    //return accumulate(clusterValues.begin(), clusterValues.end(), 0.0);
 }
 
-double Problem::evaluateSolution(const vector<int>& assignment,
-                                vector<vector<vector<double>>>& coordinates,
-                                vector<double>& clusterValues) const{
+long double Problem::evaluateSolution(const vector<int>& assignment,
+                                vector<vector<vector<long double>>>& coordinates,
+                                vector<long double>& clusterValues) const{
     coordinates = calculatePointsCoordinatesPerCluster(assignment);
     clusterValues = calculateClusterValues(coordinates);
-    double fitness = calculateFitness(clusterValues);
+    long double fitness = calculateFitness(clusterValues);
     
     // DEBUG: Detalles del fitness
     //cout << "=== DEBUG FITNESS ===" << endl;

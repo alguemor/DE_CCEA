@@ -20,7 +20,7 @@ void ClusteringBridge::individualToSolution(Individual individual, Solution*& so
     
     // Convertir el individuo a centros de clusters
     solution->beforeClusterCenters.clear();
-    solution->beforeClusterCenters.resize(numClusters, vector<double>(variables));
+    solution->beforeClusterCenters.resize(numClusters, vector<long double>(variables));
 
     for (int i = 0; i < numClusters; i++) {
         for(int d = 0; d < variables; d++){

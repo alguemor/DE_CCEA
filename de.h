@@ -20,9 +20,9 @@
 
 using namespace std;
 
-typedef double variable;
+typedef long double variable;
 typedef variable *Individual;
-typedef double Fitness;
+typedef long double Fitness;
 
 extern int g_function_number;
 extern int g_problem_size;
@@ -53,9 +53,9 @@ protected:
   Individual makeNewIndividual();
   void modifySolutionWithParentMedium(Individual child, Individual parent);
   void setBestSolution(const vector<Individual> &pop, const vector<Fitness> &fitness, Individual &bsf_solution, Fitness &bsf_fitness);
-  inline vector<double> cpindividual(Individual &ind)
+  inline vector<long double> cpindividual(Individual &ind)
 	{
-	   vector <double> copyi(problem_size);
+	   vector <long double> copyi(problem_size);
 	   for(int i = 0; i < problem_size; i++) copyi[i] = ind[i];
 	   return copyi;
 	}
