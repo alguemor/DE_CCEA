@@ -161,6 +161,18 @@ void ClusteringBridge::outputComprehensiveSolution(ofstream& outFile) const {
     outFile << "Problem Dimensions: " << problem->getVariables() << endl;
     outFile << endl;
     
+    outFile << "DATASET POINTS" << endl;
+    outFile << "==============" << endl;
+    outFile << "Point_ID Coordinates..." << endl;
+    for(int i = 0; i < dataset.size(); i++) {
+        outFile << i << " ";
+        for(int d = 0; d < dataset[i].size(); d++) {
+            outFile << dataset[i][d] << " ";
+        }
+        outFile << endl;
+    }
+    outFile << endl;
+    
     outFile << "CLUSTER CENTERS" << endl;
     outFile << "===============" << endl;
     outFile << "Cluster_ID Center_Coordinates... Capacity_Limit Assigned_Points Intra_Cluster_Sum_Squared_Distances" << endl;

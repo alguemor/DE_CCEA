@@ -30,5 +30,11 @@ bridge.o: bridge.cpp bridge.h
 test_fitness: test_fitness_evaluation.cpp dataset_manager.o bridge.o problem.o solutionGreedy.o util.o
 	$(CC) -o test_fitness test_fitness_evaluation.cpp dataset_manager.o bridge.o problem.o solutionGreedy.o util.o $(OPTION) -lm
 
+mcfp_validator: mcfp_validator.cpp
+	$(CC) -o mcfp_validator mcfp_validator.cpp $(OPTION)
+
+iterative_mcfp_validator: iterative_mcfp_validator.cpp
+	$(CC) -o iterative_mcfp_validator iterative_mcfp_validator.cpp $(OPTION)
+
 clean:
 	rm -rf *.o
