@@ -163,29 +163,29 @@ long double Problem::evaluateSolution(const vector<int>& assignment,
 }
 
 void Problem::printVector1D(const vector<int>& vector) const{
-    cout << "[";
-    for(size_t i = 0; i < vector.size(); i++) {
-        cout << vector[i];
-        if(i < vector.size() - 1) cout << ", ";
-    }
-    cout << "]" << endl;
+    // cout << "[";
+    // for(size_t i = 0; i < vector.size(); i++) {
+    //     cout << vector[i];
+    //     if(i < vector.size() - 1) cout << ", ";
+    // }
+    // cout << "]" << endl;
 }
 
 void Problem::printVector2D(const vector<vector<double>>& vector) const{
-    cout << "[" << endl;
-    for(size_t i = 0; i < vector.size(); i++){
-        cout << "  [";
-        for(size_t j = 0; j < vector[i].size(); j++){
-            cout << vector[i][j];
-            if(j < vector[i].size() - 1){
-                cout << ", ";
-            }
-        }
-        cout << "]";
-        if(i < vector.size() - 1){
-            cout << ",";
-        }
-        cout << endl;
-    }
-    cout << "]" << endl;
+    // cout << "[" << endl;
+    // for(size_t i = 0; i < vector.size(); i++){
+    //     cout << "  [";
+    //     for(size_t j = 0; j < vector[i].size(); j++){
+    //         cout << vector[i][j];
+    //         if(j < vector[i].size() - 1){
+    //             cout << ", ";
+    //         }
+    //     }
+    //     cout << "]";
+    //     if(i < vector.size() - 1){
+    //         cout << ",";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << "]" << endl;
 }

@@ -108,87 +108,87 @@ long double Util::distance(const vector<vector<long double>>& A, const vector<ve
 }
 
 void Util::printBeforeClusterCenters() const {
-    const auto& centers = solution.getBeforeClusterCenters();
-    int variables = problem.getVariables();
-    cout << "Centros de clusters (antes de asignacion):" << endl;
-    for (int i = 0; i < centers.size(); i++) {
-        cout << "  Cluster " << i << ": (";
-        for(int d = 0; d < variables; d++){
-            cout << fixed << setprecision(2) << centers[i][d];
-            if(d < variables - 1) cout << ", ";
-        }
-        cout << ")" << endl;
-    }
+    // const auto& centers = solution.getBeforeClusterCenters();
+    // int variables = problem.getVariables();
+    // cout << "Centros de clusters (antes de asignacion):" << endl;
+    // for (int i = 0; i < centers.size(); i++) {
+    //     cout << "  Cluster " << i << ": (";
+    //     for(int d = 0; d < variables; d++){
+    //         cout << fixed << setprecision(2) << centers[i][d];
+    //         if(d < variables - 1) cout << ", ";
+    //     }
+    //     cout << ")" << endl;
+    // }
 }
 
 void Util::printAfterClusterCenters() const {
-    const auto& centers = solution.getAfterClusterCenters();
-    int variables = problem.getVariables();
-    cout << "Centros de clusters (despues de asignacion):" << endl;
-    for (int i = 0; i < centers.size(); i++) {
-        cout << "  Cluster " << i << ": (";
-        for(int d = 0; d < variables; d++){
-            cout << fixed << setprecision(2) << centers[i][d];
-            if(d < variables - 1) cout << ", ";
-        }
-        cout << ")" << endl;
-    }
+    // const auto& centers = solution.getAfterClusterCenters();
+    // int variables = problem.getVariables();
+    // cout << "Centros de clusters (despues de asignacion):" << endl;
+    // for (int i = 0; i < centers.size(); i++) {
+    //     cout << "  Cluster " << i << ": (";
+    //     for(int d = 0; d < variables; d++){
+    //         cout << fixed << setprecision(2) << centers[i][d];
+    //         if(d < variables - 1) cout << ", ";
+    //     }
+    //     cout << ")" << endl;
+    // }
 }
 void Util::printAssignment() const {
-    const auto& assignment = solution.getAssignment();
-    int numClusters = problem.getNumClusters();
-    cout << "Asignacion de puntos a clusters:" << endl;
-    // Contar puntos por cluster
-    vector<int> count(numClusters, 0);
-    for (int c : assignment) {
-        if (c >= 0 && c < numClusters) {
-            count[c]++;
-        }
-    }
-    for (int i = 0; i < count.size(); i++) {
-        cout << "  Cluster " << i << ": " << count[i] << " puntos" << endl;
-    }
+    // const auto& assignment = solution.getAssignment();
+    // int numClusters = problem.getNumClusters();
+    // cout << "Asignacion de puntos a clusters:" << endl;
+    // // Contar puntos por cluster
+    // vector<int> count(numClusters, 0);
+    // for (int c : assignment) {
+    //     if (c >= 0 && c < numClusters) {
+    //         count[c]++;
+    //     }
+    // }
+    // for (int i = 0; i < count.size(); i++) {
+    //     cout << "  Cluster " << i << ": " << count[i] << " puntos" << endl;
+    // }
 }
 
 void Util::printClusterCoordinates() const {
-    const auto& coordinates = solution.getClusterCoordinates();
-    int variables = problem.getVariables();
-    cout << "Puntos por cluster:" << endl;
+    // const auto& coordinates = solution.getClusterCoordinates();
+    // int variables = problem.getVariables();
+    // cout << "Puntos por cluster:" << endl;
     
-    for (int c = 0; c < coordinates.size(); c++) {
-        cout << "  Cluster " << c << " (" << coordinates[c].size() << " puntos):" << endl;  
+    // for (int c = 0; c < coordinates.size(); c++) {
+    //     cout << "  Cluster " << c << " (" << coordinates[c].size() << " puntos):" << endl;  
         
-        // Limitar la salida si hay muchos puntos
-        const int max_points_to_show = 5;
-        for (int i = 0; i < min(max_points_to_show, (int)coordinates[c].size()); i++) {
-            cout << "    (";
-            for(int d = 0; d < variables; d++){
-                cout << coordinates[c][i][d];
-                if(d < variables - 1) cout << ", ";
-            }
-            cout << ")" << endl;
-        }
+    //     // Limitar la salida si hay muchos puntos
+    //     const int max_points_to_show = 5;
+    //     for (int i = 0; i < min(max_points_to_show, (int)coordinates[c].size()); i++) {
+    //         cout << "    (";
+    //         for(int d = 0; d < variables; d++){
+    //             cout << coordinates[c][i][d];
+    //             if(d < variables - 1) cout << ", ";
+    //         }
+    //         cout << ")" << endl;
+    //     }
         
-        if (coordinates[c].size() > max_points_to_show) {
-            cout << "    ... y " << (coordinates[c].size() - max_points_to_show) 
-                 << " puntos mas" << endl;
-        }
-    }
+    //     if (coordinates[c].size() > max_points_to_show) {
+    //         cout << "    ... y " << (coordinates[c].size() - max_points_to_show) 
+    //              << " puntos mas" << endl;
+    //     }
+    // }
 }
 void Util::printClusterValues() const {
-    const auto& values = solution.getClusterValues();
-    cout << "Valores de fitness por cluster:" << endl;
-    for (int i = 0; i < values.size(); i++) {
-        cout << "  Cluster " << i << ": " << values[i] << endl;
-    }
+    // const auto& values = solution.getClusterValues();
+    // cout << "Valores de fitness por cluster:" << endl;
+    // for (int i = 0; i < values.size(); i++) {
+    //     cout << "  Cluster " << i << ": " << values[i] << endl;
+    // }
 }
 
 void Util::printFitness() const {
-    const auto& fitness = solution.getFitness();
-    cout << "Fitness global: " << fitness << endl;
+    // const auto& fitness = solution.getFitness();
+    // cout << "Fitness global: " << fitness << endl;
 }
 
 void Util::printDistance() const{
-    const auto& distance = solution.getDistance();
-    cout << "Distancia entre centros: " << distance << endl;
+    // const auto& distance = solution.getDistance();
+    // cout << "Distancia entre centros: " << distance << endl;
 }
