@@ -164,6 +164,9 @@ void Greedy::solveGreedy(){
 
 // mcfp method
 
+// Define static constants for MCFP class
+const long long MCFP::INFCOSTO;
+
 MCFP::MCFP(Problem& prob) : Solution(prob), totalNodes(0), mxFlow(0), mnCost(0){
     int numPoints = problem.getPoints();
     int numClusters = problem.getNumClusters();

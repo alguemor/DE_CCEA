@@ -48,14 +48,14 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     // DEBUG: Verificar centros del evolutivo
     static int eval_count = 0;
     if(eval_count < 3){  // solo primeras 3 evaluaciones
-        cout << "\n=== EVAL " << eval_count << " - CENTROS DEL EVOLUTIVO ===" << endl;
-        for(int i = 0; i < solution->beforeClusterCenters.size(); i++) {
-            cout << "Cluster " << i << ": ";
-            for(int d = 0; d < solution->beforeClusterCenters[i].size(); d++) {
-                cout << solution->beforeClusterCenters[i][d] << " ";
-            }
-            cout << endl;
-        }
+        // cout << "\n=== EVAL " << eval_count << " - CENTROS DEL EVOLUTIVO ===" << endl;
+        // for(int i = 0; i < solution->beforeClusterCenters.size(); i++) {
+        //     cout << "Cluster " << i << ": ";
+        //     for(int d = 0; d < solution->beforeClusterCenters[i].size(); d++) {
+        //         cout << solution->beforeClusterCenters[i][d] << " ";
+        //     }
+        //     cout << endl;
+        // }
     }
 
     // resolver dependiendo del metodo
@@ -77,17 +77,6 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
    
     // DEBUG: Verificar centros finales calculados
     if(eval_count < 3){
-        Util util(*problem, *solution);
-        auto realCenters = util.calculateRealClusterCoordinates(problem->getNumClusters());
-        cout << "=== CENTROS FINALES CALCULADOS ===" << endl;
-        for(int i = 0; i < realCenters.size(); i++){
-            cout << "Cluster " << i << ": ";
-            for(int d = 0; d < realCenters[i].size(); d++){
-                cout << realCenters[i][d] << " ";
-            }
-            cout << endl;
-        }
-        cout << "Fitness: " << fitness << endl;
         eval_count++;
     }
 
@@ -123,8 +112,8 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
         }
         
         // DEBUG: ¿Estamos guardando los correctos?
-        cout << "\n*** NUEVA MEJOR SOLUCION - FITNESS: " << fitness << " ***" << endl;
-        cout << "Guardando informacion completa de la solucion..." << endl;
+        // cout << "\n*** NUEVA MEJOR SOLUCION - FITNESS: " << fitness << " ***" << endl;
+        // cout << "Guardando informacion completa de la solucion..." << endl;
     }
 
     delete solution;

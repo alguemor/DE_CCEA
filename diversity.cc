@@ -13,7 +13,7 @@ authors: Joel Chacón Castillo, Carlos Segura González
 extern ClusteringBridge* g_clusteringBridge;
 
 Fitness DIVERSITY::run() {
-    cout << max_num_evaluations<< endl;
+    // cout << max_num_evaluations<< endl;
   //cout << scientific << setprecision(8);
   initializeParameters();
   setSHADEParameters();
@@ -262,7 +262,7 @@ Fitness DIVERSITY::run() {
   ////sorted_array.clear();
   //free(sorted_array);
   //free(temp_fit); //.clear();
-    cout << bsf_fitness << endl;
+    // cout << bsf_fitness << endl;
     return bsf_fitness - optimum;
 }
 

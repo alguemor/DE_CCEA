@@ -55,11 +55,11 @@ void searchAlgorithm::initializeFitnessFunctionParameters() {
         }
     
         // DEBUG: Mostrar rangos calculados
-        cout << "=== RANGOS POR DIMENSION ===" << endl;
-        for(int d = 0; d < variables; d++){
-            cout << "Dim " << d << ": [" << min_bounds_per_dim[d] 
-                 << ", " << max_bounds_per_dim[d] << "]" << endl;
-        }
+        // cout << "=== RANGOS POR DIMENSION ===" << endl;
+        // for(int d = 0; d < variables; d++){
+        //     cout << "Dim " << d << ": [" << min_bounds_per_dim[d] 
+        //          << ", " << max_bounds_per_dim[d] << "]" << endl;
+        // }
 
         // Usar el rango más amplio con margen
         min_region = *min_element(min_bounds_per_dim.begin(), min_bounds_per_dim.end()) - 1.0;
