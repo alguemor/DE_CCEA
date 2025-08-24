@@ -1,5 +1,5 @@
 #include "util.h"
-#include "solutionGreedy.h"
+#include "solution.h"
 #include <iostream>
 #include <iomanip>
 #include <limits>

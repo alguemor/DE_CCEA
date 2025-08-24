@@ -43,11 +43,10 @@ int main(int argc, char **argv) {
  
     int sed = atoi(argv[1]);
     std::string datasetName = argv[2];
+    double di = atof(argv[3]);
+    std::string method = argv[4];
     //available number of fitness evaluations 
     g_max_num_evaluations = 1000; // Reduced for testing
-
-    // raw data: Record function error value (Fi(x)-Fi(x*)) after (0.01, 0.02, 0.03, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)*MaxFES for each run.
-    double di = atof(argv[3]);
 
     DatasetManager datasetManager;
     if(!datasetManager.datasetExists(datasetName)){
@@ -57,7 +56,7 @@ int main(int argc, char **argv) {
 
     DatasetInfo datasetInfo = datasetManager.getDatasetInfo(datasetName);
 
-    g_clusteringBridge = new ClusteringBridge(datasetInfo.pointsFile, datasetInfo.clustersFile);
+    g_clusteringBridge = new ClusteringBridge(datasetInfo.pointsFile, datasetInfo.clustersFile, method);
 
     int numClusters = g_clusteringBridge->getNumClusters();
     int variables = g_clusteringBridge->getDimension();
@@ -80,7 +79,10 @@ int main(int argc, char **argv) {
     outFile.open(outputFileName, ios::out);
 
     searchAlgorithm *alg = new DIVERSITY();
-    outFile << alg->run() << endl;
+    alg->run();
+    
+    // Output comprehensive solution information
+    g_clusteringBridge->outputComprehensiveSolution(outFile);
     delete alg;
 
     // Close output file
