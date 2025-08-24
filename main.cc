@@ -71,7 +71,7 @@ int main(int argc, char **argv) {
     //g_function_number = 1;
     g_Di = sqrt(g_problem_size)*di;
 
-    sprintf(g_fileName, "results/%s/s%d_p%d", datasetName.c_str(), sed, g_problem_size);
+    sprintf(g_fileName, "results/%s/s%d_p%d_%s", datasetName.c_str(), sed, g_problem_size, method.c_str());
 
     // Open output file for writing the final result
     char outputFileName[1000];
