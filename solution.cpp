@@ -83,6 +83,10 @@ const vector<vector<vector<long double>>>& Solution::getClusterCoordinates(){
     return clusterCoordinates;
 }
 
+const vector<vector<vector<long double>>>& Solution::getClusterCoordinates() const{
+    return clusterCoordinates;
+}
+
 
 // greedy method
 
