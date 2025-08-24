@@ -1,5 +1,5 @@
 #include "problem.h"
-#include "solutionGreedy.h"
+#include "solution.h"
 #include <iostream>
 
 int main(int argc, char* argv[]){

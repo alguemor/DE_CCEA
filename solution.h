@@ -1,5 +1,5 @@
-#ifndef solutionGreedy_h
-#define solutionGreedy_h
+#ifndef solution_h
+#define solution_h
 #include "problem.h"
 #include <vector>
 #include <tuple>
@@ -9,6 +9,10 @@
 using namespace std;
 
 class Solution{
+
+};
+
+class Greedy{
 private:
     Problem& problem;
     vector<vector<long double>> distances;
@@ -17,8 +21,8 @@ private:
     bool clusterCoordinatesUpdated; // flag coordenadas actualizadas
 
 public:
-    Solution(Problem& prob);
-    ~Solution();
+    Greedy(Problem& prob);
+    ~Greedy();
 
     vector<vector<long double>> beforeClusterCenters;
     // centros despues de asignacion
@@ -50,6 +54,10 @@ public:
     const vector<vector<long double>>& getAfterClusterCenters() const;
     // distancia
     long double getDistance() const;
+};
+
+class MCFP{
+
 };
 
 #endif

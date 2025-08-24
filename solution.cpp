@@ -1,11 +1,11 @@
-#include "solutionGreedy.h"
+#include "solution.h"
 #include "util.h"
 #include <iostream>
 #include <limits>
 #include <algorithm>
 using namespace std;
 
-Solution::Solution(Problem& prob) : problem(prob), fitness(0.0L), clusterCoordinatesUpdated(false){
+Greedy::Greedy(Problem& prob) : problem(prob), fitness(0.0L), clusterCoordinatesUpdated(false){
     int numClusters = problem.getNumClusters();
     int numPoints = problem.getPoints();
     int variables = problem.getVariables();
@@ -19,10 +19,10 @@ Solution::Solution(Problem& prob) : problem(prob), fitness(0.0L), clusterCoordin
     afterClusterCenters.resize(numClusters, vector<long double>(variables, 0.0L));
 }
 
-Solution::~Solution(){
+Greedy::~Greedy(){
 }
 
-void Solution::calculateDistances(){
+void Greedy::calculateDistances(){
     const auto& dataset = problem.getDataset();
     int numPoints = problem.getPoints();
     int numClusters = problem.getNumClusters();
@@ -40,7 +40,7 @@ void Solution::calculateDistances(){
     }
 }
 
-void Solution::sortDistances(){
+void Greedy::sortDistances(){
     int numPoints = problem.getPoints();
     int numClusters = problem.getNumClusters();
 
@@ -56,7 +56,7 @@ void Solution::sortDistances(){
     });
 }
 
-void Solution::greedy(){
+void Greedy::greedy(){
     int numPoints = problem.getPoints();
 
     fill(assignment.begin(), assignment.end(), -1);
