@@ -30,12 +30,8 @@ void Solution::calculateDistances(){
 
     for(int i = 0; i < numPoints; i++){
         for(int j = 0; j < numClusters; j++){
-            long double distance = 0.0L;
-            for(int d = 0; d < variables; d++){
-                long double dif = dataset[i][d] - beforeClusterCenters[j][d];
-                distance += dif * dif;
-            }
-            distances[i][j] = sqrtl(distance);
+            vector<long double> pointCoords(dataset[i].begin(), dataset[i].end());
+            distances[i][j] = squaredDistance(pointCoords, beforeClusterCenters[j]);
         }
     }
 }
@@ -85,6 +81,15 @@ const vector<vector<vector<long double>>>& Solution::getClusterCoordinates(){
 
 const vector<vector<vector<long double>>>& Solution::getClusterCoordinates() const{
     return clusterCoordinates;
+}
+
+double Solution::squaredDistance(const vector<long double>& p1, const vector<long double>& p2){
+    double sum = 0.0;
+    for(int i = 0; i < p1.size() && i < p2.size(); i++){
+        double diff = p1[i] - p2[i];
+        sum += diff * diff;
+    }
+    return sum;
 }
 
 
@@ -187,14 +192,6 @@ void MCFP::addEdge(int u, int v, long long capacity, long long cost){
     flowEdges.push_back((edge){v, u, 0, 0, -cost});
 }
 
-double MCFP::squaredDistance(const vector<long double>& p1, const vector<long double>& p2){
-    double sum = 0.0;
-    for(int i = 0; i < p1.size() && i < p2.size(); i++){
-        double diff = p1[i] - p2[i];
-        sum += diff * diff;
-    }
-    return sum;
-}
 
 void MCFP::buildMCFPGraph(){
     int numPoints = problem.getPoints();
@@ -211,7 +208,7 @@ void MCFP::buildMCFPGraph(){
         addEdge(source, i + 1, 1, 0);
     }
     
-    // points -> cluster centers (capacity 1, cost = squared distance)
+    // points -> cluster centers (capacity 1, cost = squared distance)  
     const auto& dataset = problem.getDataset();
     for(int i = 0; i < numPoints; i++){
         vector<long double> pointCoords(dataset[i].begin(), dataset[i].end());

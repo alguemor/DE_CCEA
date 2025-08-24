@@ -33,8 +33,9 @@ public:
 
     // Shared methods
     void calculateDistances();
-    void calculateClusterCoordinates();
+    void calculateClusterCoordinates(); 
     void updateEvaluation();
+    double squaredDistance(const vector<long double>& p1, const vector<long double>& p2);
     
     // Shared getters
     const vector<vector<long double>>& getBeforeClusterCenters() const;
@@ -94,8 +95,6 @@ public:
     void addEdge(int u, int v, long long cap, long long cost);
     void clearGraph();
     void solveMCFP();
-    
-    double squaredDistance(const vector<long double>& p1, const vector<long double>& p2);
     
 };
 

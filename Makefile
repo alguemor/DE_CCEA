@@ -27,11 +27,5 @@ dataset_manager.o: dataset_manager.cpp dataset_manager.h
 bridge.o: bridge.cpp bridge.h
 	$(CC) $(CFLAGS) $(OPTION) -c bridge.cpp
 
-mcfp_validator: mcfp_validator.cpp
-	$(CC) -o mcfp_validator mcfp_validator.cpp $(OPTION)
-
-iterative_mcfp_validator: iterative_mcfp_validator.cpp
-	$(CC) -o iterative_mcfp_validator iterative_mcfp_validator.cpp $(OPTION)
-
 clean:
 	rm -rf *.o
