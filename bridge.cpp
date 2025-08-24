@@ -1,46 +1,53 @@
 #include "bridge.h"
 using namespace std;
 
-ClusteringBridge::ClusteringBridge(const string& datasetFile, const string& clustersFile) {
+ClusteringBridge::ClusteringBridge(const string& datasetFile, const string& clustersFile, const string& method) 
+    : solverMethod(method){
     problem = new Problem(datasetFile, clustersFile);
     problem->loadData();
 }
 
-ClusteringBridge::~ClusteringBridge() {
+ClusteringBridge::~ClusteringBridge(){
     delete problem;
 }
 
-void ClusteringBridge::individualToSolution(Individual individual, Solution*& solution) {
-    if (solution == nullptr) {
-        solution = new Solution(*problem);
+void ClusteringBridge::individualToSolution(Individual individual, Solution*& solution){
+    // method router
+    if(solution == nullptr){
+        if(solverMethod == "greedy"){
+            solution = new Greedy(*problem);
+        }else if(solverMethod == "mcfp"){
+            solution = new MCFP(*problem);
+        }else{
+            solution = new Greedy(*problem);
+        }
     }
     
     int numClusters = problem->getNumClusters();
     int variables = problem->getVariables();
     
-    // Convertir el individuo a centros de clusters
+    // convertir el individuo a centros de clusters
     solution->beforeClusterCenters.clear();
     solution->beforeClusterCenters.resize(numClusters, vector<long double>(variables));
 
-    for (int i = 0; i < numClusters; i++) {
+    for(int i = 0; i < numClusters; i++){
         for(int d = 0; d < variables; d++){
             solution->beforeClusterCenters[i][d] = individual[i * variables + d];
         } 
     }
     
-    // calcular distancias desde cada punto a los centros
+    // calcular distancias (metodo compartido)
     solution->calculateDistances();
-    solution->sortDistances();
 }
 
-Fitness ClusteringBridge::evaluateIndividual(Individual individual) {
+Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     Solution* solution = nullptr;
     individualToSolution(individual, solution);
   
     //cout << "DEBUG: Primer centro del evolutivo: " << solution->beforeClusterCenters[0][0] << endl;
     // DEBUG: Verificar centros del evolutivo
     static int eval_count = 0;
-    if(eval_count < 3) {  // Solo primeras 3 evaluaciones
+    if(eval_count < 3){  // solo primeras 3 evaluaciones
         cout << "\n=== EVAL " << eval_count << " - CENTROS DEL EVOLUTIVO ===" << endl;
         for(int i = 0; i < solution->beforeClusterCenters.size(); i++) {
             cout << "Cluster " << i << ": ";
@@ -51,20 +58,31 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual) {
         }
     }
 
-    // se cambio desde individualToSolution
-    solution->greedy();
+    // resolver dependiendo del metodo
+    if(solverMethod == "greedy"){
+        Greedy* greedySolution = static_cast<Greedy*>(solution);
+        greedySolution->sortDistancesGreedy();
+        greedySolution->greedy();
+    }else if(solverMethod == "mcfp"){
+        MCFP* mcfpSolution = static_cast<MCFP*>(solution);
+        mcfpSolution->buildMCFPGraph();
+        mcfpSolution->solveMCFPFlow();
+        mcfpSolution->extractAssignmentFromFlow();
+    }
+    
+    // actualizar evaluacion (metodo compartido)
     solution->updateEvaluation();
 
     Fitness fitness = solution->getFitness();
    
     // DEBUG: Verificar centros finales calculados
-    if(eval_count < 3) {
+    if(eval_count < 3){
         Util util(*problem, *solution);
         auto realCenters = util.calculateRealClusterCoordinates(problem->getNumClusters());
         cout << "=== CENTROS FINALES CALCULADOS ===" << endl;
-        for(int i = 0; i < realCenters.size(); i++) {
+        for(int i = 0; i < realCenters.size(); i++){
             cout << "Cluster " << i << ": ";
-            for(int d = 0; d < realCenters[i].size(); d++) {
+            for(int d = 0; d < realCenters[i].size(); d++){
                 cout << realCenters[i][d] << " ";
             }
             cout << endl;
@@ -164,9 +182,9 @@ void ClusteringBridge::outputComprehensiveSolution(ofstream& outFile) const {
     outFile << "DATASET POINTS" << endl;
     outFile << "==============" << endl;
     outFile << "Point_ID Coordinates..." << endl;
-    for(int i = 0; i < dataset.size(); i++) {
+    for(int i = 0; i < dataset.size(); i++){
         outFile << i << " ";
-        for(int d = 0; d < dataset[i].size(); d++) {
+        for(int d = 0; d < dataset[i].size(); d++){
             outFile << dataset[i][d] << " ";
         }
         outFile << endl;
@@ -177,15 +195,15 @@ void ClusteringBridge::outputComprehensiveSolution(ofstream& outFile) const {
     outFile << "===============" << endl;
     outFile << "Cluster_ID Center_Coordinates... Capacity_Limit Assigned_Points Intra_Cluster_Sum_Squared_Distances" << endl;
     
-    for(int c = 0; c < bestAfterCenters.size(); c++) {
+    for(int c = 0; c < bestAfterCenters.size(); c++){
         outFile << c << " ";
-        for(int d = 0; d < bestAfterCenters[c].size(); d++) {
+        for(int d = 0; d < bestAfterCenters[c].size(); d++){
             outFile << bestAfterCenters[c][d] << " ";
         }
         
         // Count assigned points to this cluster
         int assignedCount = 0;
-        for(int i = 0; i < bestAssignment.size(); i++) {
+        for(int i = 0; i < bestAssignment.size(); i++){
             if(bestAssignment[i] == c) assignedCount++;
         }
         
@@ -197,9 +215,9 @@ void ClusteringBridge::outputComprehensiveSolution(ofstream& outFile) const {
     outFile << "=================" << endl;
     outFile << "Point_ID Point_Coordinates... Assigned_Cluster Distance_to_Center" << endl;
     
-    for(int i = 0; i < dataset.size(); i++) {
+    for(int i = 0; i < dataset.size(); i++){
         outFile << i << " ";
-        for(int d = 0; d < dataset[i].size(); d++) {
+        for(int d = 0; d < dataset[i].size(); d++){
             outFile << dataset[i][d] << " ";
         }
         outFile << bestAssignment[i] << " " << bestPointDistances[i][0] << endl;
@@ -208,11 +226,11 @@ void ClusteringBridge::outputComprehensiveSolution(ofstream& outFile) const {
     
     outFile << "CLUSTER DETAILS" << endl;
     outFile << "===============" << endl;
-    for(int c = 0; c < problem->getNumClusters(); c++) {
+    for(int c = 0; c < problem->getNumClusters(); c++){
         outFile << "Cluster_" << c << ": Points [";
         bool first = true;
-        for(int i = 0; i < bestAssignment.size(); i++) {
-            if(bestAssignment[i] == c) {
+        for(int i = 0; i < bestAssignment.size(); i++){
+            if(bestAssignment[i] == c){
                 if(!first) outFile << ",";
                 outFile << i;
                 first = false;

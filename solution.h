@@ -43,6 +43,7 @@ public:
     const vector<long double>& getClusterValues() const;
     long double getFitness() const;
     long double getDistance() const;
+    const vector<vector<vector<long double>>>& getClusterCoordinates();
     const vector<vector<vector<long double>>>& getClusterCoordinates() const;
 };
 

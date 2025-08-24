@@ -2,7 +2,7 @@ HEADER = de.h
 TARGET = DE_CCEA_exe
 
 OBJS := $(patsubst %.cc,%.o,$(wildcard *.cc)) \
-    problem.o solutionGreedy.o util.o dataset_manager.o bridge.o
+    problem.o solution.o util.o dataset_manager.o bridge.o
 CC = g++
 OPTION = -Ofast -march=native -D_GLIBCXX_USE_C99_MATH_TR1
 
@@ -15,8 +15,8 @@ $(TARGET): $(OBJS)
 problem.o: problem.cpp problem.h
 	$(CC) $(CFLAGS) $(OPTION) -c problem.cpp
 
-solutionGreedy.o: solutionGreedy.cpp solutionGreedy.h
-	$(CC) $(CFLAGS) $(OPTION) -c solutionGreedy.cpp
+solution.o: solution.cpp solution.h
+	$(CC) $(CFLAGS) $(OPTION) -c solution.cpp
 
 util.o: util.cpp util.h
 	$(CC) $(CFLAGS) $(OPTION) -c util.cpp
@@ -26,9 +26,6 @@ dataset_manager.o: dataset_manager.cpp dataset_manager.h
 
 bridge.o: bridge.cpp bridge.h
 	$(CC) $(CFLAGS) $(OPTION) -c bridge.cpp
-
-test_fitness: test_fitness_evaluation.cpp dataset_manager.o bridge.o problem.o solutionGreedy.o util.o
-	$(CC) -o test_fitness test_fitness_evaluation.cpp dataset_manager.o bridge.o problem.o solutionGreedy.o util.o $(OPTION) -lm
 
 mcfp_validator: mcfp_validator.cpp
 	$(CC) -o mcfp_validator mcfp_validator.cpp $(OPTION)
