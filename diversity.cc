@@ -243,9 +243,15 @@ Fitness DIVERSITY::run() {
   }
   
     if(outFitness.is_open()){
-        outFitness << bsf_fitness << " ";
-        for(int k = 0; k < problem_size; k++){
-            outFitness << bsf_solution[k] << " ";
+        // using ClusteringBridge's bestFitness for consistency with result.txt
+        outFitness << g_clusteringBridge->getBestFitness() << " ";
+        
+        // using ClusteringBridge's bestAfterCenters for consistency with result.txt
+        const auto& bestCenters = g_clusteringBridge->getBestAfterCenters();
+        for(int cluster = 0; cluster < bestCenters.size(); cluster++){
+            for(int dim = 0; dim < bestCenters[cluster].size(); dim++){
+                outFitness << bestCenters[cluster][dim] << " ";
+            }
         }
         outFitness.close();
     }
