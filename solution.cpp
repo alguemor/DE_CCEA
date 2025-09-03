@@ -83,10 +83,10 @@ const vector<vector<vector<long double>>>& Solution::getClusterCoordinates() con
     return clusterCoordinates;
 }
 
-double Solution::squaredDistance(const vector<long double>& p1, const vector<long double>& p2){
-    double sum = 0.0;
+long double Solution::squaredDistance(const vector<long double>& p1, const vector<long double>& p2){
+    long double sum = 0.0L;
     for(int i = 0; i < p1.size() && i < p2.size(); i++){
-        double diff = p1[i] - p2[i];
+        long double diff = p1[i] - p2[i];
         sum += diff * diff;
     }
     return sum;
@@ -216,7 +216,7 @@ void MCFP::buildMCFPGraph(){
     for(int i = 0; i < numPoints; i++){
         vector<long double> pointCoords(dataset[i].begin(), dataset[i].end());
         for(int j = 0; j < numClusters; j++) {
-            double cost = squaredDistance(pointCoords, beforeClusterCenters[j]);
+            long double cost = squaredDistance(pointCoords, beforeClusterCenters[j]);
             long long intCost = (long long)(cost * 1000); // scale for precision
             addEdge(i + 1, numPoints + 1 + j, 1, intCost);
         }
