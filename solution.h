@@ -35,7 +35,7 @@ public:
     void calculateDistances();
     void calculateClusterCoordinates(); 
     void updateEvaluation();
-    double squaredDistance(const vector<long double>& p1, const vector<long double>& p2);
+    long double squaredDistance(const vector<long double>& p1, const vector<long double>& p2);
     
     // Shared getters
     const vector<vector<long double>>& getBeforeClusterCenters() const;
