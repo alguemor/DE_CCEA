@@ -40,6 +40,8 @@ void ClusteringBridge::individualToSolution(Individual individual, Solution*& so
     solution->calculateDistances();
 }
 
+extern ofstream logFile;
+
 Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     Solution* solution = nullptr;
     individualToSolution(individual, solution);
@@ -83,10 +85,37 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     //cout << fitness << endl;
 
     static Fitness bestFitnessSeenSoFar = numeric_limits<Fitness>::max();
+    static int totalEvaluations = 0;
+    totalEvaluations++;
+
+    // Log fitness evaluations for analysis
+    if(totalEvaluations <= 50 || (totalEvaluations % 100 == 0) || fitness < bestFitnessSeenSoFar) {
+        logFile << "EVAL " << totalEvaluations << ": Fitness = " << fitness;
+        if(fitness < bestFitnessSeenSoFar) logFile << " *** NEW BEST ***";
+        logFile << endl;
+    }
+
     if(fitness < bestFitnessSeenSoFar){
         bestFitnessSeenSoFar = fitness;
         Util util(*problem, *solution);
-        
+
+        // Log detailed information for new best solutions
+        logFile << "=== NEW BEST SOLUTION DETAILS (Eval " << totalEvaluations << ") ===" << endl;
+        logFile << "Fitness: " << fitness << endl;
+
+        // Log cluster assignment statistics
+        const vector<int>& assignment = solution->getAssignment();
+        vector<int> clusterSizes(problem->getNumClusters(), 0);
+        for(int i = 0; i < assignment.size(); i++) {
+            clusterSizes[assignment[i]]++;
+        }
+
+        logFile << "Cluster sizes: ";
+        for(int c = 0; c < clusterSizes.size(); c++) {
+            logFile << "C" << c << "=" << clusterSizes[c] << " ";
+        }
+        logFile << endl;
+
         // Store comprehensive best solution information
         bestFitness = fitness;
         bestAfterCenters = util.calculateRealClusterCoordinates(problem->getNumClusters());

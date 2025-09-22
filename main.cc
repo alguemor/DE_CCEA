@@ -33,6 +33,7 @@ int g_memory_size;
 double g_p_best_rate;
 
 ofstream outFile;
+ofstream logFile;
 char g_fileName[1000];
 double g_Di;
 
@@ -78,6 +79,24 @@ int main(int argc, char **argv) {
     sprintf(outputFileName, "%s_result.txt", g_fileName);
     outFile.open(outputFileName, ios::out);
 
+    // Open log file for debugging information
+    char logFileName[1000];
+    sprintf(logFileName, "results/logs/%s_s%d_p%d_%s_debug.log", datasetName.c_str(), sed, g_problem_size, method.c_str());
+    logFile.open(logFileName, ios::out);
+
+    // Log initial algorithm setup
+    logFile << "=== DE-CCEA ALGORITHM DEBUG LOG ===" << endl;
+    logFile << "Dataset: " << datasetName << endl;
+    logFile << "Method: " << method << endl;
+    logFile << "Seed: " << sed << endl;
+    logFile << "Problem Size: " << g_problem_size << endl;
+    logFile << "Population Size: " << g_pop_size << endl;
+    logFile << "Max Evaluations: " << g_max_num_evaluations << endl;
+    logFile << "Diversity Parameter (Di): " << g_Di << endl;
+    logFile << "Number of Clusters: " << numClusters << endl;
+    logFile << "Variables per Cluster: " << variables << endl;
+    logFile << "=================================" << endl << endl;
+
     searchAlgorithm *alg = new DIVERSITY();
     alg->run();
     
@@ -87,6 +106,9 @@ int main(int argc, char **argv) {
 
     // Close output file
     outFile.close();
+
+    // Close log file
+    logFile.close();
 
     //free memory of the benchmark
 	    delete g_clusteringBridge;

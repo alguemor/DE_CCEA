@@ -70,11 +70,26 @@ Fitness DIVERSITY::run() {
     g_clusteringBridge->getNumPoints();
   }
   evaluatePopulation(pop, fitness);
+
+  // Log initial population information
+  logFile << "INITIAL POPULATION EVALUATION" << endl;
+  logFile << "============================" << endl;
   for(int i = 0; i < pop_size; i++)
   {
 	elite_fitness[i] = fitness[i];
 	for(int j = 0; j < problem_size; j++) // copy the parents information to elite...
 	elite[i][j] = pop[i][j];
+
+	// Log first few individuals' centroids and fitness
+	if(i < 5) {
+	    logFile << "Individual " << i << " Fitness: " << fitness[i] << endl;
+	    logFile << "  Centroids: ";
+	    for(int j = 0; j < min(problem_size, 20); j++) { // Log first 20 variables max
+	        logFile << pop[i][j] << " ";
+	    }
+	    if(problem_size > 20) logFile << "...";
+	    logFile << endl;
+	}
   }
   evaluatePopulation(elite, elite_fitness);
 
@@ -87,6 +102,11 @@ Fitness DIVERSITY::run() {
   if ((fitness[0] - optimum) < epsilon) fitness[0] = optimum;
   bsf_fitness = fitness[0];
   for (int j = 0; j < problem_size; j ++) bsf_solution[j] = pop[0][j];
+
+  // Log initial best solution
+  logFile << endl << "INITIAL BEST SOLUTION" << endl;
+  logFile << "===================" << endl;
+  logFile << "Best Fitness: " << bsf_fitness << endl;
 
   for (int i = 0; i < pop_size; i++) {
     nfes++;
@@ -115,10 +135,22 @@ Fitness DIVERSITY::run() {
   //Fitness *temp_fit = (Fitness*)malloc(sizeof(Fitness) * pop_size);
 
   //main loop
-  while (nfes < max_num_evaluations) 
-  { 
+  int generation = 0;
+  logFile << endl << "STARTING MAIN EVOLUTION LOOP" << endl;
+  logFile << "============================" << endl;
+
+  while (nfes < max_num_evaluations)
+  {
+      generation++;
       //Decrement the linear parameter of diversity
       updateD();
+
+      // Log generation progress every 10 generations or at key points
+      if(generation % 10 == 1 || generation <= 5) {
+          logFile << endl << "Generation " << generation << " (nfes: " << nfes << ")" << endl;
+          logFile << "Current Best Fitness: " << bsf_fitness << endl;
+          logFile << "Diversity Parameter D: " << D << endl;
+      }
      // for (int i = 0; i < pop_size; i++) sorted_array[i] = i;
      // for (int i = 0; i < pop_size; i++) temp_fit[i] = elite_fitness[i];
      // sortIndexWithQuickSort(&temp_fit[0], 0, pop_size - 1, sorted_array);
@@ -162,8 +194,12 @@ Fitness DIVERSITY::run() {
 
        //if ((elite_fitness[i] - optimum) < epsilon) elite_fitness[i] = optimum;
 
-        if (elite_fitness[i] < bsf_fitness) 
+        if (elite_fitness[i] < bsf_fitness)
         {
+          logFile << "NEW BEST SOLUTION FOUND!" << endl;
+          logFile << "Generation: " << generation << ", nfes: " << nfes << endl;
+          logFile << "Old fitness: " << bsf_fitness << " -> New fitness: " << elite_fitness[i] << endl;
+
           bsf_fitness = elite_fitness[i];
           for (int j = 0; j < problem_size; j ++) bsf_solution[j] = elite[i][j];
         }
@@ -221,6 +257,14 @@ Fitness DIVERSITY::run() {
 	
     //reducePopulation(pop, fitness, elite, elite_fitness, nfes, max_num_evaluations);
   }
+
+  // Log algorithm termination
+  logFile << endl << "ALGORITHM TERMINATION" << endl;
+  logFile << "===================" << endl;
+  logFile << "Total Generations: " << generation << endl;
+  logFile << "Total Evaluations: " << nfes << endl;
+  logFile << "Final Best Fitness: " << bsf_fitness << endl;
+  logFile << "Final Diversity Parameter D: " << D << endl;
 
 
  //free dynamic memory 
