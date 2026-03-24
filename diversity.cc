@@ -145,11 +145,29 @@ Fitness DIVERSITY::run() {
       //Decrement the linear parameter of diversity
       updateD();
 
-      // Log generation progress every 10 generations or at key points
+      // Log generation progress with population statistics
       if(generation % 10 == 1 || generation <= 5) {
+          // Calculate population fitness statistics
+          Fitness minFit = fitness[0], maxFit = fitness[0];
+          double sumFit = 0.0;
+          for(int i = 0; i < pop_size; i++) {
+              if(fitness[i] < minFit) minFit = fitness[i];
+              if(fitness[i] > maxFit) maxFit = fitness[i];
+              sumFit += (double)fitness[i];
+          }
+          double meanFit = sumFit / pop_size;
+          double sumSqDiff = 0.0;
+          for(int i = 0; i < pop_size; i++) {
+              double diff = (double)fitness[i] - meanFit;
+              sumSqDiff += diff * diff;
+          }
+          double stdFit = sqrt(sumSqDiff / pop_size);
+
           logFile << endl << "Generation " << generation << " (nfes: " << nfes << ")" << endl;
-          logFile << "Current Best Fitness: " << bsf_fitness << endl;
-          logFile << "Diversity Parameter D: " << D << endl;
+          logFile << "Best Fitness: " << bsf_fitness << endl;
+          logFile << "Pop Stats - Min: " << minFit << " Max: " << maxFit
+                  << " Mean: " << meanFit << " Std: " << stdFit << endl;
+          logFile << "Diversity D: " << D << endl;
       }
      // for (int i = 0; i < pop_size; i++) sorted_array[i] = i;
      // for (int i = 0; i < pop_size; i++) temp_fit[i] = elite_fitness[i];

@@ -19,6 +19,7 @@
 #include "bridge.h"
 #include <iostream>
 #include <string>
+#include <sys/time.h>
 
 double *OShift,*M,*y,*z,*x_bound;
 int ini_flag=0,n_flag,func_flag,*SS;
@@ -46,8 +47,8 @@ int main(int argc, char **argv) {
     std::string datasetName = argv[2];
     double di = atof(argv[3]);
     std::string method = argv[4];
-    //available number of fitness evaluations 
-    g_max_num_evaluations = 1000; // Reduced for testing
+    //available number of fitness evaluations
+    g_max_num_evaluations = (argc > 5) ? atoi(argv[5]) : 100000;
 
     DatasetManager datasetManager;
     if(!datasetManager.datasetExists(datasetName)){
@@ -63,16 +64,14 @@ int main(int argc, char **argv) {
     int variables = g_clusteringBridge->getDimension();
     g_problem_size = numClusters * variables;
     
-    //g_pop_size = 10000;
-    g_pop_size = (int)round(sqrt(g_problem_size) * log(g_problem_size) * 50);
-    //std::cout << g_pop_size << std::endl;
+    g_pop_size = 200;
 
     srand(sed);
 
     //g_function_number = 1;
     g_Di = sqrt(g_problem_size)*di;
 
-    sprintf(g_fileName, "results/%s/s%d_p%d_%s", datasetName.c_str(), sed, g_problem_size, method.c_str());
+    sprintf(g_fileName, "results/%s/s%d_p%d_%s_di%.1f", datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
 
     // Open output file for writing the final result
     char outputFileName[1000];
@@ -81,8 +80,12 @@ int main(int argc, char **argv) {
 
     // Open log file for debugging information
     char logFileName[1000];
-    sprintf(logFileName, "results/logs/%s_s%d_p%d_%s_debug.log", datasetName.c_str(), sed, g_problem_size, method.c_str());
+    sprintf(logFileName, "results/logs/%s_s%d_p%d_%s_di%.1f_debug.log", datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
     logFile.open(logFileName, ios::out);
+
+    // Timing
+    struct timeval start_time, end_time;
+    gettimeofday(&start_time, NULL);
 
     // Log initial algorithm setup
     logFile << "=== DE-CCEA ALGORITHM DEBUG LOG ===" << endl;
@@ -95,19 +98,49 @@ int main(int argc, char **argv) {
     logFile << "Diversity Parameter (Di): " << g_Di << endl;
     logFile << "Number of Clusters: " << numClusters << endl;
     logFile << "Variables per Cluster: " << variables << endl;
+    logFile << "Number of Points: " << g_clusteringBridge->getNumPoints() << endl;
+
+    // Log cardinality constraints
+    const vector<int>& limits = g_clusteringBridge->getProblem()->getLimClusters();
+    logFile << "Cardinality Constraints: ";
+    int totalCapacity = 0;
+    for(int c = 0; c < limits.size(); c++) {
+        logFile << "C" << c << "=" << limits[c] << " ";
+        totalCapacity += limits[c];
+    }
+    logFile << endl;
+    logFile << "Total Capacity: " << totalCapacity << " (Points: " << g_clusteringBridge->getNumPoints() << ")";
+    if(totalCapacity != g_clusteringBridge->getNumPoints()) {
+        logFile << " *** MISMATCH ***";
+    }
+    logFile << endl;
+    logFile << "Start Time: " << start_time.tv_sec << "." << start_time.tv_usec << endl;
     logFile << "=================================" << endl << endl;
+    logFile.flush();
 
     searchAlgorithm *alg = new DIVERSITY();
     alg->run();
-    
+
+    // Timing end
+    gettimeofday(&end_time, NULL);
+    double elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
+                         (end_time.tv_usec - start_time.tv_usec) / 1000000.0;
+
     // Output comprehensive solution information
     g_clusteringBridge->outputComprehensiveSolution(outFile);
     delete alg;
 
-    // Close output file
-    outFile.close();
+    // Log execution time
+    logFile << endl << "=================================" << endl;
+    logFile << "End Time: " << end_time.tv_sec << "." << end_time.tv_usec << endl;
+    logFile << "Total Execution Time: " << elapsed_time << " seconds" << endl;
+    logFile << "=================================" << endl;
+    logFile.flush();
 
-    // Close log file
+    outFile << endl << "Execution Time: " << elapsed_time << " seconds" << endl;
+
+    // Close files
+    outFile.close();
     logFile.close();
 
     //free memory of the benchmark
