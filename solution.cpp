@@ -5,7 +5,10 @@
 #include <algorithm>
 #include <queue> // mcfp
 #include <cstring> // mcfp
+#include <fstream>
 using namespace std;
+
+extern ofstream logFile;
 
 Solution::Solution(Problem& prob) : problem(prob), fitness(0.0L), distance(0.0L), clusterCoordinatesUpdated(false){
     int numClusters = problem.getNumClusters();
@@ -134,6 +137,20 @@ void Greedy::greedy(){
         if(clusterLimits[center_id] > 0) {
             assignment[point_id] = center_id;
             clusterLimits[center_id]--;
+        }
+    }
+
+    // Log unassigned points (first eval only for performance)
+    static int greedyCallCount = 0;
+    greedyCallCount++;
+    if(greedyCallCount <= 3) {
+        int unassigned = 0;
+        for(int i = 0; i < numPoints; i++) {
+            if(assignment[i] == -1) unassigned++;
+        }
+        if(unassigned > 0) {
+            logFile << "[GREEDY] Eval " << greedyCallCount
+                    << ": " << unassigned << " points UNASSIGNED out of " << numPoints << endl;
         }
     }
 
@@ -285,21 +302,36 @@ void MCFP::solveMCFPFlow(){
 void MCFP::extractAssignmentFromFlow(){
     int numPoints = problem.getPoints();
     int numClusters = problem.getNumClusters();
-    
+
     fill(assignment.begin(), assignment.end(), -1);
-    
+
     for(int i = 0; i < numPoints; i++){
         for(int j = 0; j < numClusters; j++){
-            // encuentra la arista por la cual pasa el punto i+1 al cluster numPoints+1+j
             for(int edgeIdx = 0; edgeIdx < flowEdges.size(); edgeIdx += 2){
-                if(flowEdges[edgeIdx].u == i + 1 && 
-                    flowEdges[edgeIdx].v == numPoints + 1 + j && 
+                if(flowEdges[edgeIdx].u == i + 1 &&
+                    flowEdges[edgeIdx].v == numPoints + 1 + j &&
                     flowEdges[edgeIdx].flow > 0){
                     assignment[i] = j;
                     break;
                 }
             }
         }
+    }
+
+    // Log MCFP flow validation (first few evals only)
+    static int mcfpCallCount = 0;
+    mcfpCallCount++;
+    if(mcfpCallCount <= 3) {
+        int unassigned = 0;
+        for(int i = 0; i < numPoints; i++) {
+            if(assignment[i] == -1) unassigned++;
+        }
+        logFile << "[MCFP] Eval " << mcfpCallCount
+                << ": MaxFlow=" << mxFlow << " (expected=" << numPoints << ")"
+                << " MinCost=" << mnCost;
+        if(mxFlow != numPoints) logFile << " *** INCOMPLETE FLOW ***";
+        if(unassigned > 0) logFile << " Unassigned=" << unassigned;
+        logFile << endl;
     }
 }
 

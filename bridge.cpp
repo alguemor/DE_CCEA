@@ -45,20 +45,6 @@ extern ofstream logFile;
 Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     Solution* solution = nullptr;
     individualToSolution(individual, solution);
-  
-    //cout << "DEBUG: Primer centro del evolutivo: " << solution->beforeClusterCenters[0][0] << endl;
-    // DEBUG: Verificar centros del evolutivo
-    static int eval_count = 0;
-    if(eval_count < 3){  // solo primeras 3 evaluaciones
-        // cout << "\n=== EVAL " << eval_count << " - CENTROS DEL EVOLUTIVO ===" << endl;
-        // for(int i = 0; i < solution->beforeClusterCenters.size(); i++) {
-        //     cout << "Cluster " << i << ": ";
-        //     for(int d = 0; d < solution->beforeClusterCenters[i].size(); d++) {
-        //         cout << solution->beforeClusterCenters[i][d] << " ";
-        //     }
-        //     cout << endl;
-        // }
-    }
 
     // resolver dependiendo del metodo
     if(solverMethod == "greedy"){
@@ -71,78 +57,106 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
         mcfpSolution->solveMCFPFlow();
         mcfpSolution->extractAssignmentFromFlow();
     }
-    
+
+    // Validate assignment: check all points are assigned
+    const vector<int>& assignment = solution->getAssignment();
+    int numPoints = problem->getPoints();
+    int numClusters = problem->getNumClusters();
+    int unassigned = 0;
+    vector<int> clusterSizes(numClusters, 0);
+    for(int i = 0; i < numPoints; i++) {
+        if(assignment[i] < 0 || assignment[i] >= numClusters) {
+            unassigned++;
+        } else {
+            clusterSizes[assignment[i]]++;
+        }
+    }
+
     // actualizar evaluacion (metodo compartido)
     solution->updateEvaluation();
 
     Fitness fitness = solution->getFitness();
-   
-    // DEBUG: Verificar centros finales calculados
-    if(eval_count < 3){
-        eval_count++;
-    }
-
-    //cout << fitness << endl;
 
     static Fitness bestFitnessSeenSoFar = numeric_limits<Fitness>::max();
     static int totalEvaluations = 0;
+    static int evalsSinceLastImprovement = 0;
     totalEvaluations++;
+    evalsSinceLastImprovement++;
 
-    // Log fitness evaluations for analysis
-    if(totalEvaluations <= 50 || (totalEvaluations % 100 == 0) || fitness < bestFitnessSeenSoFar) {
+    // Log fitness evaluations: first 50, then every 500, or on new best
+    if(totalEvaluations <= 50 || (totalEvaluations % 500 == 0) || fitness < bestFitnessSeenSoFar) {
         logFile << "EVAL " << totalEvaluations << ": Fitness = " << fitness;
         if(fitness < bestFitnessSeenSoFar) logFile << " *** NEW BEST ***";
+        if(unassigned > 0) logFile << " *** UNASSIGNED: " << unassigned << " ***";
         logFile << endl;
     }
 
     if(fitness < bestFitnessSeenSoFar){
         bestFitnessSeenSoFar = fitness;
+        evalsSinceLastImprovement = 0;
         Util util(*problem, *solution);
 
-        // Log detailed information for new best solutions
         logFile << "=== NEW BEST SOLUTION DETAILS (Eval " << totalEvaluations << ") ===" << endl;
         logFile << "Fitness: " << fitness << endl;
 
-        // Log cluster assignment statistics
-        const vector<int>& assignment = solution->getAssignment();
-        vector<int> clusterSizes(problem->getNumClusters(), 0);
-        for(int i = 0; i < assignment.size(); i++) {
-            clusterSizes[assignment[i]]++;
+        // Cluster sizes vs cardinality constraints
+        const vector<int>& limits = problem->getLimClusters();
+        logFile << "Cluster sizes (actual/limit): ";
+        bool cardinalityViolation = false;
+        for(int c = 0; c < numClusters; c++) {
+            logFile << "C" << c << "=" << clusterSizes[c] << "/" << limits[c];
+            if(clusterSizes[c] != limits[c]) {
+                logFile << "!";
+                cardinalityViolation = true;
+            }
+            logFile << " ";
+        }
+        logFile << endl;
+        if(cardinalityViolation) {
+            logFile << "*** CARDINALITY CONSTRAINT VIOLATION ***" << endl;
+        }
+        if(unassigned > 0) {
+            logFile << "*** " << unassigned << " POINTS UNASSIGNED ***" << endl;
         }
 
-        logFile << "Cluster sizes: ";
-        for(int c = 0; c < clusterSizes.size(); c++) {
-            logFile << "C" << c << "=" << clusterSizes[c] << " ";
+        // Per-cluster fitness contribution
+        const vector<long double>& clusterVals = solution->getClusterValues();
+        logFile << "Per-cluster fitness: ";
+        for(int c = 0; c < numClusters; c++) {
+            logFile << "C" << c << "=" << clusterVals[c] << " ";
         }
         logFile << endl;
 
         // Store comprehensive best solution information
         bestFitness = fitness;
-        bestAfterCenters = util.calculateRealClusterCoordinates(problem->getNumClusters());
+        bestAfterCenters = util.calculateRealClusterCoordinates(numClusters);
         bestAssignment = solution->getAssignment();
         bestClusterValues = solution->getClusterValues();
-        
+
         // Calculate point distances to their assigned cluster centers
         bestPointDistances.clear();
         const vector<vector<long double>>& dataset = problem->getDataset();
         bestPointDistances.resize(dataset.size());
-        
-        for(int i = 0; i < dataset.size(); i++) {
+
+        for(size_t i = 0; i < dataset.size(); i++) {
             int assignedCluster = bestAssignment[i];
-            bestPointDistances[i].resize(1); // Store just the distance to assigned cluster
-            
-            // Calculate distance from point i to its assigned cluster center
+            bestPointDistances[i].resize(1);
             long double dist = 0.0;
-            for(int d = 0; d < bestAfterCenters[assignedCluster].size(); d++) {
+            for(size_t d = 0; d < bestAfterCenters[assignedCluster].size(); d++) {
                 long double diff = dataset[i][d] - bestAfterCenters[assignedCluster][d];
                 dist += diff * diff;
             }
             bestPointDistances[i][0] = sqrt(dist);
         }
-        
-        // DEBUG: ¿Estamos guardando los correctos?
-        // cout << "\n*** NUEVA MEJOR SOLUCION - FITNESS: " << fitness << " ***" << endl;
-        // cout << "Guardando informacion completa de la solucion..." << endl;
+
+        logFile.flush();
+    }
+
+    // Stagnation warning
+    if(evalsSinceLastImprovement > 0 && evalsSinceLastImprovement % 10000 == 0) {
+        logFile << "*** STAGNATION WARNING: " << evalsSinceLastImprovement
+                << " evals without improvement (best=" << bestFitnessSeenSoFar << ") ***" << endl;
+        logFile.flush();
     }
 
     delete solution;
