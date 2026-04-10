@@ -6,9 +6,8 @@
 #include <queue> // mcfp
 #include <cstring> // mcfp
 #include <fstream>
+#include "logger.h"
 using namespace std;
-
-extern ofstream logFile;
 
 Solution::Solution(Problem& prob) : problem(prob), fitness(0.0L), distance(0.0L), clusterCoordinatesUpdated(false){
     int numClusters = problem.getNumClusters();
@@ -149,8 +148,8 @@ void Greedy::greedy(){
             if(assignment[i] == -1) unassigned++;
         }
         if(unassigned > 0) {
-            logFile << "[GREEDY] Eval " << greedyCallCount
-                    << ": " << unassigned << " points UNASSIGNED out of " << numPoints << endl;
+            LOG_WARNING("[GREEDY] Eval " << greedyCallCount
+                        << ": " << unassigned << " points UNASSIGNED out of " << numPoints);
         }
     }
 
@@ -326,12 +325,14 @@ void MCFP::extractAssignmentFromFlow(){
         for(int i = 0; i < numPoints; i++) {
             if(assignment[i] == -1) unassigned++;
         }
-        logFile << "[MCFP] Eval " << mcfpCallCount
-                << ": MaxFlow=" << mxFlow << " (expected=" << numPoints << ")"
-                << " MinCost=" << mnCost;
-        if(mxFlow != numPoints) logFile << " *** INCOMPLETE FLOW ***";
-        if(unassigned > 0) logFile << " Unassigned=" << unassigned;
-        logFile << endl;
+        { std::ostringstream _oss;
+          _oss << "[MCFP] Eval " << mcfpCallCount
+               << ": MaxFlow=" << mxFlow << " (expected=" << numPoints << ")"
+               << " MinCost=" << mnCost;
+          if(mxFlow != numPoints) _oss << " *** INCOMPLETE FLOW ***";
+          if(unassigned > 0) _oss << " Unassigned=" << unassigned;
+          g_logger.info(_oss.str());
+        }
     }
 }
 
