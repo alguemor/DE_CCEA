@@ -20,6 +20,9 @@
 #include <iostream>
 #include <string>
 #include <sys/time.h>
+#include <cstdio>
+#include <cstring>
+#include <sys/stat.h>
 
 double *OShift,*M,*y,*z,*x_bound;
 int ini_flag=0,n_flag,func_flag,*SS;
@@ -34,11 +37,21 @@ int g_memory_size;
 double g_p_best_rate;
 
 ofstream outFile;
-ofstream logFile;
 char g_fileName[1000];
 double g_Di;
 
 ClusteringBridge* g_clusteringBridge = nullptr;
+
+static long readRssKb() {
+    long rss = 0;
+    FILE* fp = fopen("/proc/self/status", "r");
+    if (!fp) return 0;
+    char line[128];
+    while (fgets(line, sizeof(line), fp))
+        if (strncmp(line, "VmRSS:", 6) == 0) { sscanf(line + 6, "%ld", &rss); break; }
+    fclose(fp);
+    return rss;
+}
 
 //.Exec sed problem Di
 int main(int argc, char **argv) {
@@ -49,6 +62,7 @@ int main(int argc, char **argv) {
     std::string method = argv[4];
     //available number of fitness evaluations
     g_max_num_evaluations = (argc > 5) ? atoi(argv[5]) : 100000;
+    std::string results_dir = (argc > 6) ? argv[6] : "results";
 
     DatasetManager datasetManager;
     if(!datasetManager.datasetExists(datasetName)){
@@ -71,7 +85,13 @@ int main(int argc, char **argv) {
     //g_function_number = 1;
     g_Di = sqrt(g_problem_size)*di;
 
-    sprintf(g_fileName, "results/%s/s%d_p%d_%s_di%.1f", datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
+    // Ensure output directories exist
+    { char d[1000];
+      mkdir(results_dir.c_str(), 0755);
+      sprintf(d, "%s/%s", results_dir.c_str(), datasetName.c_str()); mkdir(d, 0755);
+      sprintf(d, "%s/logs", results_dir.c_str()); mkdir(d, 0755); }
+
+    sprintf(g_fileName, "%s/%s/s%d_p%d_%s_di%.1f", results_dir.c_str(), datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
 
     // Open output file for writing the final result
     char outputFileName[1000];
@@ -80,43 +100,48 @@ int main(int argc, char **argv) {
 
     // Open log file for debugging information
     char logFileName[1000];
-    sprintf(logFileName, "results/logs/%s_s%d_p%d_%s_di%.1f_debug.log", datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
-    logFile.open(logFileName, ios::out);
+    sprintf(logFileName, "%s/logs/%s_s%d_p%d_%s_di%.1f_debug.log", results_dir.c_str(), datasetName.c_str(), sed, g_problem_size, method.c_str(), di);
+    g_logger.open(logFileName);
 
     // Timing
     struct timeval start_time, end_time;
     gettimeofday(&start_time, NULL);
 
     // Log initial algorithm setup
-    logFile << "=== DE-CCEA ALGORITHM DEBUG LOG ===" << endl;
-    logFile << "Dataset: " << datasetName << endl;
-    logFile << "Method: " << method << endl;
-    logFile << "Seed: " << sed << endl;
-    logFile << "Problem Size: " << g_problem_size << endl;
-    logFile << "Population Size: " << g_pop_size << endl;
-    logFile << "Max Evaluations: " << g_max_num_evaluations << endl;
-    logFile << "Diversity Parameter (Di): " << g_Di << endl;
-    logFile << "Number of Clusters: " << numClusters << endl;
-    logFile << "Variables per Cluster: " << variables << endl;
-    logFile << "Number of Points: " << g_clusteringBridge->getNumPoints() << endl;
+    long rssStart = readRssKb();
+    LOG_INFO("=== DE-CCEA ALGORITHM DEBUG LOG ===");
+    LOG_INFO("Dataset: " << datasetName);
+    LOG_INFO("Method: " << method);
+    LOG_INFO("Seed: " << sed);
+    LOG_INFO("Problem Size: " << g_problem_size);
+    LOG_INFO("Population Size: " << g_pop_size);
+    LOG_INFO("Max Evaluations: " << g_max_num_evaluations);
+    LOG_INFO("Diversity Parameter (Di): " << g_Di);
+    LOG_INFO("Number of Clusters: " << numClusters);
+    LOG_INFO("Variables per Cluster: " << variables);
+    LOG_INFO("Number of Points: " << g_clusteringBridge->getNumPoints());
+    LOG_INFO("Results Dir: " << results_dir);
 
     // Log cardinality constraints
     const vector<int>& limits = g_clusteringBridge->getProblem()->getLimClusters();
-    logFile << "Cardinality Constraints: ";
-    int totalCapacity = 0;
-    for(int c = 0; c < limits.size(); c++) {
-        logFile << "C" << c << "=" << limits[c] << " ";
-        totalCapacity += limits[c];
+    { std::ostringstream _cardOss;
+      _cardOss << "Cardinality Constraints: ";
+      int totalCapacity = 0;
+      for(int c = 0; c < (int)limits.size(); c++) {
+          _cardOss << "C" << c << "=" << limits[c] << " ";
+          totalCapacity += limits[c];
+      }
+      g_logger.info(_cardOss.str());
+      std::ostringstream _capOss;
+      _capOss << "Total Capacity: " << totalCapacity
+              << " (Points: " << g_clusteringBridge->getNumPoints() << ")";
+      if(totalCapacity != g_clusteringBridge->getNumPoints()) _capOss << " *** MISMATCH ***";
+      g_logger.info(_capOss.str());
     }
-    logFile << endl;
-    logFile << "Total Capacity: " << totalCapacity << " (Points: " << g_clusteringBridge->getNumPoints() << ")";
-    if(totalCapacity != g_clusteringBridge->getNumPoints()) {
-        logFile << " *** MISMATCH ***";
-    }
-    logFile << endl;
-    logFile << "Start Time: " << start_time.tv_sec << "." << start_time.tv_usec << endl;
-    logFile << "=================================" << endl << endl;
-    logFile.flush();
+    LOG_INFO("Start Time: " << start_time.tv_sec << "." << start_time.tv_usec);
+    LOG_INFO("Memory RSS at start: " << rssStart << " kB");
+    LOG_INFO("=================================");
+    g_logger.flush();
 
     searchAlgorithm *alg = new DIVERSITY();
     alg->run();
@@ -131,17 +156,20 @@ int main(int argc, char **argv) {
     delete alg;
 
     // Log execution time
-    logFile << endl << "=================================" << endl;
-    logFile << "End Time: " << end_time.tv_sec << "." << end_time.tv_usec << endl;
-    logFile << "Total Execution Time: " << elapsed_time << " seconds" << endl;
-    logFile << "=================================" << endl;
-    logFile.flush();
+    long rssEnd = readRssKb();
+    LOG_INFO("=================================");
+    LOG_INFO("End Time: " << end_time.tv_sec << "." << end_time.tv_usec);
+    LOG_INFO("Total Execution Time: " << elapsed_time << " seconds");
+    LOG_INFO("Memory RSS at end: " << rssEnd << " kB");
+    LOG_INFO("Memory RSS delta: " << (rssEnd - rssStart) << " kB");
+    LOG_INFO("=================================");
+    g_logger.flush();
 
     outFile << endl << "Execution Time: " << elapsed_time << " seconds" << endl;
 
     // Close files
     outFile.close();
-    logFile.close();
+    g_logger.close();
 
     //free memory of the benchmark
 	    delete g_clusteringBridge;

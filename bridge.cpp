@@ -40,8 +40,6 @@ void ClusteringBridge::individualToSolution(Individual individual, Solution*& so
     solution->calculateDistances();
 }
 
-extern ofstream logFile;
-
 Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     Solution* solution = nullptr;
     individualToSolution(individual, solution);
@@ -53,9 +51,24 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
         greedySolution->greedy();
     }else if(solverMethod == "mcfp"){
         MCFP* mcfpSolution = static_cast<MCFP*>(solution);
+        struct timeval t0, t1, t2, t3;
+        gettimeofday(&t0, NULL);
         mcfpSolution->buildMCFPGraph();
+        gettimeofday(&t1, NULL);
         mcfpSolution->solveMCFPFlow();
+        gettimeofday(&t2, NULL);
         mcfpSolution->extractAssignmentFromFlow();
+        gettimeofday(&t3, NULL);
+        static int _evalCount = 0; _evalCount++;
+        if(_evalCount <= 5 || _evalCount % 500 == 0) {
+            double tBuild   = (t1.tv_sec-t0.tv_sec) + (t1.tv_usec-t0.tv_usec)/1e6;
+            double tSolve   = (t2.tv_sec-t1.tv_sec) + (t2.tv_usec-t1.tv_usec)/1e6;
+            double tExtract = (t3.tv_sec-t2.tv_sec) + (t3.tv_usec-t2.tv_usec)/1e6;
+            LOG_DEBUG("MCFP timing eval=" << _evalCount
+                      << " build=" << tBuild << "s"
+                      << " solve=" << tSolve << "s"
+                      << " extract=" << tExtract << "s");
+        }
     }
 
     // Validate assignment: check all points are assigned
@@ -85,10 +98,11 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
 
     // Log fitness evaluations: first 50, then every 500, or on new best
     if(totalEvaluations <= 50 || (totalEvaluations % 500 == 0) || fitness < bestFitnessSeenSoFar) {
-        logFile << "EVAL " << totalEvaluations << ": Fitness = " << fitness;
-        if(fitness < bestFitnessSeenSoFar) logFile << " *** NEW BEST ***";
-        if(unassigned > 0) logFile << " *** UNASSIGNED: " << unassigned << " ***";
-        logFile << endl;
+        std::ostringstream _oss;
+        _oss << "EVAL " << totalEvaluations << ": Fitness = " << fitness;
+        if(fitness < bestFitnessSeenSoFar) _oss << " *** NEW BEST ***";
+        if(unassigned > 0) _oss << " *** UNASSIGNED: " << unassigned << " ***";
+        g_logger.info(_oss.str());
     }
 
     if(fitness < bestFitnessSeenSoFar){
@@ -96,36 +110,31 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
         evalsSinceLastImprovement = 0;
         Util util(*problem, *solution);
 
-        logFile << "=== NEW BEST SOLUTION DETAILS (Eval " << totalEvaluations << ") ===" << endl;
-        logFile << "Fitness: " << fitness << endl;
+        LOG_INFO("=== NEW BEST SOLUTION DETAILS (Eval " << totalEvaluations << ") ===");
+        LOG_INFO("Fitness: " << fitness);
 
         // Cluster sizes vs cardinality constraints
         const vector<int>& limits = problem->getLimClusters();
-        logFile << "Cluster sizes (actual/limit): ";
-        bool cardinalityViolation = false;
-        for(int c = 0; c < numClusters; c++) {
-            logFile << "C" << c << "=" << clusterSizes[c] << "/" << limits[c];
-            if(clusterSizes[c] != limits[c]) {
-                logFile << "!";
-                cardinalityViolation = true;
-            }
-            logFile << " ";
+        { std::ostringstream _oss;
+          _oss << "Cluster sizes (actual/limit): ";
+          bool cardinalityViolation = false;
+          for(int c = 0; c < numClusters; c++) {
+              _oss << "C" << c << "=" << clusterSizes[c] << "/" << limits[c];
+              if(clusterSizes[c] != limits[c]) { _oss << "!"; cardinalityViolation = true; }
+              _oss << " ";
+          }
+          g_logger.info(_oss.str());
+          if(cardinalityViolation) LOG_WARNING("*** CARDINALITY CONSTRAINT VIOLATION ***");
         }
-        logFile << endl;
-        if(cardinalityViolation) {
-            logFile << "*** CARDINALITY CONSTRAINT VIOLATION ***" << endl;
-        }
-        if(unassigned > 0) {
-            logFile << "*** " << unassigned << " POINTS UNASSIGNED ***" << endl;
-        }
+        if(unassigned > 0) LOG_WARNING("*** " << unassigned << " POINTS UNASSIGNED ***");
 
         // Per-cluster fitness contribution
         const vector<long double>& clusterVals = solution->getClusterValues();
-        logFile << "Per-cluster fitness: ";
-        for(int c = 0; c < numClusters; c++) {
-            logFile << "C" << c << "=" << clusterVals[c] << " ";
+        { std::ostringstream _oss;
+          _oss << "Per-cluster fitness: ";
+          for(int c = 0; c < numClusters; c++) _oss << "C" << c << "=" << clusterVals[c] << " ";
+          g_logger.info(_oss.str());
         }
-        logFile << endl;
 
         // Store comprehensive best solution information
         bestFitness = fitness;
@@ -149,14 +158,15 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
             bestPointDistances[i][0] = sqrt(dist);
         }
 
-        logFile.flush();
+        g_logger.flush();
     }
 
-    // Stagnation warning
-    if(evalsSinceLastImprovement > 0 && evalsSinceLastImprovement % 10000 == 0) {
-        logFile << "*** STAGNATION WARNING: " << evalsSinceLastImprovement
-                << " evals without improvement (best=" << bestFitnessSeenSoFar << ") ***" << endl;
-        logFile.flush();
+    // Stagnation warning at 1000, 5000, 10000 evals without improvement
+    if(evalsSinceLastImprovement == 1000 || evalsSinceLastImprovement == 5000 ||
+       evalsSinceLastImprovement == 10000) {
+        LOG_WARNING("STAGNATION: " << evalsSinceLastImprovement
+                    << " evals without improvement (best=" << bestFitnessSeenSoFar << ")");
+        g_logger.flush();
     }
 
     delete solution;

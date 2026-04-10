@@ -17,6 +17,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include "logger.h"
 
 using namespace std;
 
@@ -35,7 +36,6 @@ extern double g_p_best_rate;
 extern double g_arc_rate;
 
 extern ofstream outFile;
-extern ofstream logFile;
 
 extern char g_fileName[1000];
 extern double g_Di;
