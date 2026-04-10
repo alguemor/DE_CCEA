@@ -1,0 +1,192 @@
+=== DE-CCEA ALGORITHM DEBUG LOG ===
+Dataset: 10
+Method: mcfp
+Seed: 1
+Problem Size: 21
+Population Size: 200
+Max Evaluations: 5000
+Diversity Parameter (Di): 2.29129
+Number of Clusters: 3
+Variables per Cluster: 7
+Number of Points: 210
+Cardinality Constraints: C0=70 C1=70 C2=70 
+Total Capacity: 210 (Points: 210)
+Start Time: 1774372096.852343
+=================================
+
+[MCFP] Eval 1: MaxFlow=210 (expected=210) MinCost=6859750
+EVAL 1: Fitness = 811.282 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 1) ===
+Fitness: 811.282
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=236.802 C1=133.254 C2=441.226 
+[MCFP] Eval 2: MaxFlow=210 (expected=210) MinCost=2679024
+EVAL 2: Fitness = 899.876
+[MCFP] Eval 3: MaxFlow=210 (expected=210) MinCost=5571651
+EVAL 3: Fitness = 670.987 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 3) ===
+Fitness: 670.987
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=236.43 C1=264.318 C2=170.239 
+EVAL 4: Fitness = 797.179
+EVAL 5: Fitness = 1088.26
+EVAL 6: Fitness = 1236.48
+EVAL 7: Fitness = 786.927
+EVAL 8: Fitness = 1267.94
+EVAL 9: Fitness = 868.061
+EVAL 10: Fitness = 1549.58
+EVAL 11: Fitness = 833.557
+EVAL 12: Fitness = 634.654 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 12) ===
+Fitness: 634.654
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=203.091 C1=274.03 C2=157.534 
+EVAL 13: Fitness = 882.914
+EVAL 14: Fitness = 751.819
+EVAL 15: Fitness = 1365.56
+EVAL 16: Fitness = 911.987
+EVAL 17: Fitness = 1442.79
+EVAL 18: Fitness = 849.56
+EVAL 19: Fitness = 844.623
+EVAL 20: Fitness = 1347.87
+EVAL 21: Fitness = 893.707
+EVAL 22: Fitness = 1282.8
+EVAL 23: Fitness = 1323.07
+EVAL 24: Fitness = 698.788
+EVAL 25: Fitness = 1041.81
+EVAL 26: Fitness = 1248.19
+EVAL 27: Fitness = 781.358
+EVAL 28: Fitness = 817.963
+EVAL 29: Fitness = 710.334
+EVAL 30: Fitness = 1436.34
+EVAL 31: Fitness = 1345.71
+EVAL 32: Fitness = 623.059 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 32) ===
+Fitness: 623.059
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=276.971 C1=179.425 C2=166.663 
+EVAL 33: Fitness = 1099.09
+EVAL 34: Fitness = 1063.26
+EVAL 35: Fitness = 623.466
+EVAL 36: Fitness = 1066.92
+EVAL 37: Fitness = 1260.8
+EVAL 38: Fitness = 639.019
+EVAL 39: Fitness = 1277.8
+EVAL 40: Fitness = 850.928
+EVAL 41: Fitness = 1032.49
+EVAL 42: Fitness = 859.973
+EVAL 43: Fitness = 1153.35
+EVAL 44: Fitness = 626.472
+EVAL 45: Fitness = 1155.5
+EVAL 46: Fitness = 694.356
+EVAL 47: Fitness = 1301.03
+EVAL 48: Fitness = 964.316
+EVAL 49: Fitness = 1082.09
+EVAL 50: Fitness = 875.716
+EVAL 120: Fitness = 616.247 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 120) ===
+Fitness: 616.247
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=265.602 C1=192.888 C2=157.758 
+EVAL 133: Fitness = 610.061 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 133) ===
+Fitness: 610.061
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=182.002 C1=265.602 C2=162.456 
+EVAL 193: Fitness = 607.089 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 193) ===
+Fitness: 607.089
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=258.925 C1=167.161 C2=181.003 
+INITIAL POPULATION EVALUATION
+============================
+Individual 0 Fitness: 811.282
+  Centroids: 19.4876 14.3188 0.894398 6.31703 3.90904 2.28445 5.19984 18.7256 13.7544 0.869147 5.74686 3.51231 3.57062 5.56172 20.6741 16.8444 0.878155 6.17292 2.82867 5.43324 ...
+Individual 1 Fitness: 899.876
+  Centroids: 13.1622 13.0742 0.89672 5.17726 3.19252 1.76331 4.73999 21.1686 13.4664 0.864625 6.38926 3.48953 3.04185 5.81387 16.1422 14.7989 0.9153 5.41851 3.71221 4.81624 ...
+Individual 2 Fitness: 670.987
+  Centroids: 14.8284 16.725 0.839321 5.52497 3.76324 7.83324 4.66067 20.6434 14.9558 0.817583 5.24037 3.56051 7.61179 5.2276 11.2696 12.5069 0.858539 5.01106 2.96431 8.23015 ...
+Individual 3 Fitness: 797.179
+  Centroids: 19.6012 13.7007 0.867582 5.56537 3.69663 4.70696 5.87515 16.2197 12.6001 0.856328 6.55394 3.93593 6.30987 5.0964 18.4111 15.5075 0.847116 6.12064 2.86286 4.1499 ...
+Individual 4 Fitness: 1088.26
+  Centroids: 19.3712 14.0088 0.833332 6.48563 3.12156 6.04621 6.46159 16.8237 15.5914 0.902726 5.67966 3.92633 3.82944 6.17379 17.8359 16.8191 0.86127 5.28231 3.9632 7.84171 ...
+
+INITIAL BEST SOLUTION
+===================
+Best Fitness: 811.282
+
+STARTING MAIN EVOLUTION LOOP
+============================
+
+Generation 1 (nfes: 200)
+Best Fitness: 607.089
+Pop Stats - Min: 607.089 Max: 1862.73 Mean: 942.126 Std: 254.588
+Diversity D: 2.19047
+EVAL 500: Fitness = 721.664
+
+Generation 2 (nfes: 400)
+Best Fitness: 607.089
+Pop Stats - Min: 607.089 Max: 1862.73 Mean: 924.485 Std: 247.615
+Diversity D: 2.08965
+
+Generation 3 (nfes: 600)
+Best Fitness: 607.089
+Pop Stats - Min: 607.089 Max: 1862.73 Mean: 896.561 Std: 234.546
+Diversity D: 1.98884
+EVAL 1000: Fitness = 1663.27
+
+Generation 4 (nfes: 800)
+Best Fitness: 607.089
+Pop Stats - Min: 607.089 Max: 1842.21 Mean: 896.295 Std: 241.93
+Diversity D: 1.88802
+
+Generation 5 (nfes: 1000)
+Best Fitness: 607.089
+Pop Stats - Min: 607.089 Max: 1606.03 Mean: 910.785 Std: 245.541
+Diversity D: 1.7872
+EVAL 1500: Fitness = 1016.94
+EVAL 1550: Fitness = 606.878 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 1550) ===
+Fitness: 606.878
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=180.808 C1=258.909 C2=167.161 
+NEW BEST SOLUTION FOUND!
+Generation: 7, nfes: 1550
+Old fitness: 607.089 -> New fitness: 606.878
+EVAL 2000: Fitness = 911.999
+
+Generation 11 (nfes: 2200)
+Best Fitness: 606.878
+Pop Stats - Min: 606.878 Max: 2115.84 Mean: 927.637 Std: 292.143
+Diversity D: 1.1823
+EVAL 2500: Fitness = 1121.86
+EVAL 3000: Fitness = 919.945
+EVAL 3500: Fitness = 1101.14
+EVAL 4000: Fitness = 651.467
+
+Generation 21 (nfes: 4200)
+Best Fitness: 606.878
+Pop Stats - Min: 606.878 Max: 2135.59 Mean: 870.359 Std: 265.305
+Diversity D: 0.174138
+EVAL 4500: Fitness = 1298.85
+EVAL 4618: Fitness = 605.601 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 4618) ===
+Fitness: 605.601
+Cluster sizes (actual/limit): C0=70/70 C1=70/70 C2=70/70 
+Per-cluster fitness: C0=176.631 C1=167.161 C2=261.809 
+EVAL 5000: Fitness = 675.168
+NEW BEST SOLUTION FOUND!
+Generation: 23, nfes: 4618
+Old fitness: 606.878 -> New fitness: 605.601
+
+ALGORITHM TERMINATION
+===================
+Total Generations: 24
+Total Evaluations: 5000
+Final Best Fitness: 605.601
+Final Diversity Parameter D: -1
+
+=================================
+End Time: 1774372108.791806
+Total Execution Time: 11.9395 seconds
+=================================

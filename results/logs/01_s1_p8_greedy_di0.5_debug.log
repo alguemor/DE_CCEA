@@ -1,0 +1,589 @@
+=== DE-CCEA ALGORITHM DEBUG LOG ===
+Dataset: 01
+Method: greedy
+Seed: 1
+Problem Size: 8
+Population Size: 200
+Max Evaluations: 100000
+Diversity Parameter (Di): 1.41421
+Number of Clusters: 4
+Variables per Cluster: 2
+Number of Points: 75
+Cardinality Constraints: C0=15 C1=20 C2=17 C3=23 
+Total Capacity: 75 (Points: 75)
+Start Time: 1774370954.422036
+=================================
+
+EVAL 1: Fitness = 44770.2 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 1) ===
+Fitness: 44770.2
+Cluster sizes (actual/limit): C0=15/15 C1=20/20 C2=17/17 C3=23/23 
+Per-cluster fitness: C0=1785.33 C1=29182.7 C2=10625.4 C3=3176.78 
+EVAL 2: Fitness = 125503
+EVAL 3: Fitness = 79876.9
+EVAL 4: Fitness = 110160
+EVAL 5: Fitness = 67209.6
+EVAL 6: Fitness = 114232
+EVAL 7: Fitness = 59312.4
+EVAL 8: Fitness = 32498.6 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 8) ===
+Fitness: 32498.6
+Cluster sizes (actual/limit): C0=15/15 C1=20/20 C2=17/17 C3=23/23 
+Per-cluster fitness: C0=2655.6 C1=12808.8 C2=1094 C3=15940.3 
+EVAL 9: Fitness = 68912.4
+EVAL 10: Fitness = 101898
+EVAL 11: Fitness = 91176.7
+EVAL 12: Fitness = 122258
+EVAL 13: Fitness = 110139
+EVAL 14: Fitness = 105005
+EVAL 15: Fitness = 12881.1 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 15) ===
+Fitness: 12881.1
+Cluster sizes (actual/limit): C0=15/15 C1=20/20 C2=17/17 C3=23/23 
+Per-cluster fitness: C0=1456.53 C1=3689.5 C2=4558.24 C3=3176.78 
+EVAL 16: Fitness = 91306.2
+EVAL 17: Fitness = 69303.3
+EVAL 18: Fitness = 114349
+EVAL 19: Fitness = 119225
+EVAL 20: Fitness = 67567.8
+EVAL 21: Fitness = 131834
+EVAL 22: Fitness = 97143.7
+EVAL 23: Fitness = 121080
+EVAL 24: Fitness = 102889
+EVAL 25: Fitness = 186524
+EVAL 26: Fitness = 78621
+EVAL 27: Fitness = 61750.6
+EVAL 28: Fitness = 94640.4
+EVAL 29: Fitness = 85406.3
+EVAL 30: Fitness = 105516
+EVAL 31: Fitness = 166284
+EVAL 32: Fitness = 118962
+EVAL 33: Fitness = 137813
+EVAL 34: Fitness = 95269.8
+EVAL 35: Fitness = 111677
+EVAL 36: Fitness = 145232
+EVAL 37: Fitness = 92994.7
+EVAL 38: Fitness = 79192.1
+EVAL 39: Fitness = 70044.3
+EVAL 40: Fitness = 121282
+EVAL 41: Fitness = 54511.6
+EVAL 42: Fitness = 93806.4
+EVAL 43: Fitness = 142099
+EVAL 44: Fitness = 145450
+EVAL 45: Fitness = 134203
+EVAL 46: Fitness = 85178
+EVAL 47: Fitness = 111612
+EVAL 48: Fitness = 77340.2
+EVAL 49: Fitness = 117574
+EVAL 50: Fitness = 82029.6
+INITIAL POPULATION EVALUATION
+============================
+Individual 0 Fitness: 44770.2
+  Centroids: 98.9412 63.9462 92.4902 125.363 107.016 34.0278 41.8802 120.771 
+Individual 1 Fitness: 125503
+  Centroids: 35.3885 88.2034 57.9459 99.5884 45.2206 82.0369 111.602 143.262 
+Individual 2 Fitness: 79876.9
+  Centroids: 75.8354 113.029 20.0011 96.2593 5.84196 40.9188 19.5072 126.235 
+Individual 3 Fitness: 110160
+  Centroids: 21.7047 64.9435 18.6663 20.5389 116.878 37.175 61.9614 131.545 
+Individual 4 Fitness: 67209.6
+  Centroids: 73.2283 48.9968 76.0434 83.6917 59.7749 151.862 37.0544 121.246 
+
+INITIAL BEST SOLUTION
+===================
+Best Fitness: 44770.2
+
+STARTING MAIN EVOLUTION LOOP
+============================
+
+Generation 1 (nfes: 200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 191552 Mean: 97677.1 Std: 34245.9
+Diversity D: 1.4111
+EVAL 500: Fitness = 87375.1
+
+Generation 2 (nfes: 400)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 194561 Mean: 95052.9 Std: 34896.9
+Diversity D: 1.40799
+
+Generation 3 (nfes: 600)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 187240 Mean: 93718.3 Std: 36911.9
+Diversity D: 1.40488
+EVAL 1000: Fitness = 150727
+
+Generation 4 (nfes: 800)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 199429 Mean: 88306.9 Std: 34345.2
+Diversity D: 1.40177
+
+Generation 5 (nfes: 1000)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 184963 Mean: 89095.8 Std: 33360.4
+Diversity D: 1.39866
+EVAL 1500: Fitness = 58407
+EVAL 2000: Fitness = 52426.5
+
+Generation 11 (nfes: 2200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 193113 Mean: 86240 Std: 38308
+Diversity D: 1.37999
+EVAL 2500: Fitness = 79446.4
+EVAL 3000: Fitness = 121466
+EVAL 3500: Fitness = 87413.9
+EVAL 4000: Fitness = 32472.7
+
+Generation 21 (nfes: 4200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 170520 Mean: 81130.1 Std: 39126.7
+Diversity D: 1.34888
+EVAL 4500: Fitness = 36245.9
+EVAL 5000: Fitness = 149223
+EVAL 5500: Fitness = 167038
+EVAL 6000: Fitness = 87360.9
+
+Generation 31 (nfes: 6200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 211249 Mean: 79891.2 Std: 39488.8
+Diversity D: 1.31776
+EVAL 6500: Fitness = 23199.4
+EVAL 7000: Fitness = 54994.4
+EVAL 7500: Fitness = 76771.6
+EVAL 8000: Fitness = 109155
+
+Generation 41 (nfes: 8200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 183001 Mean: 74603.6 Std: 37655
+Diversity D: 1.28665
+EVAL 8500: Fitness = 70661.1
+EVAL 9000: Fitness = 102397
+EVAL 9500: Fitness = 25722.2
+EVAL 10000: Fitness = 106403
+*** STAGNATION WARNING: 10000 evals without improvement (best=12881.1) ***
+
+Generation 51 (nfes: 10200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 188913 Mean: 72825.5 Std: 37289.1
+Diversity D: 1.25554
+EVAL 10500: Fitness = 46622.1
+EVAL 11000: Fitness = 113323
+EVAL 11500: Fitness = 49326.3
+EVAL 12000: Fitness = 21044.3
+
+Generation 61 (nfes: 12200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 206244 Mean: 77408.3 Std: 40696.2
+Diversity D: 1.22443
+EVAL 12500: Fitness = 113101
+EVAL 13000: Fitness = 102817
+EVAL 13500: Fitness = 56198.8
+EVAL 14000: Fitness = 171282
+
+Generation 71 (nfes: 14200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 197602 Mean: 78093.8 Std: 40452.8
+Diversity D: 1.19331
+EVAL 14500: Fitness = 60518.6
+EVAL 15000: Fitness = 74499.7
+EVAL 15500: Fitness = 173227
+EVAL 16000: Fitness = 59623.4
+
+Generation 81 (nfes: 16200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 192162 Mean: 76730.2 Std: 38492.7
+Diversity D: 1.1622
+EVAL 16500: Fitness = 47378.1
+EVAL 17000: Fitness = 140378
+EVAL 17500: Fitness = 156519
+EVAL 18000: Fitness = 70420.8
+
+Generation 91 (nfes: 18200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 166366 Mean: 74771.1 Std: 36579
+Diversity D: 1.13109
+EVAL 18500: Fitness = 152084
+EVAL 19000: Fitness = 87299
+EVAL 19500: Fitness = 159591
+EVAL 20000: Fitness = 12881.1
+*** STAGNATION WARNING: 20000 evals without improvement (best=12881.1) ***
+
+Generation 101 (nfes: 20200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 189385 Mean: 74596.9 Std: 39401.6
+Diversity D: 1.09998
+EVAL 20500: Fitness = 113857
+EVAL 21000: Fitness = 86593.5
+EVAL 21500: Fitness = 108553
+EVAL 22000: Fitness = 72415.4
+
+Generation 111 (nfes: 22200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 184868 Mean: 79586.6 Std: 41338.2
+Diversity D: 1.06886
+EVAL 22500: Fitness = 181748
+EVAL 23000: Fitness = 37525
+EVAL 23500: Fitness = 134393
+EVAL 24000: Fitness = 130913
+
+Generation 121 (nfes: 24200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 172761 Mean: 75724.9 Std: 38127.2
+Diversity D: 1.03775
+EVAL 24500: Fitness = 61695.1
+EVAL 25000: Fitness = 33058
+EVAL 25500: Fitness = 146894
+EVAL 26000: Fitness = 72094.7
+
+Generation 131 (nfes: 26200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 161586 Mean: 77613.2 Std: 37390.1
+Diversity D: 1.00664
+EVAL 26500: Fitness = 136006
+EVAL 27000: Fitness = 140620
+EVAL 27500: Fitness = 45474.9
+EVAL 28000: Fitness = 106555
+
+Generation 141 (nfes: 28200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 173951 Mean: 76622.3 Std: 39040.2
+Diversity D: 0.975525
+EVAL 28500: Fitness = 143645
+EVAL 29000: Fitness = 12881.1
+EVAL 29500: Fitness = 87901.9
+EVAL 30000: Fitness = 66875.3
+*** STAGNATION WARNING: 30000 evals without improvement (best=12881.1) ***
+
+Generation 151 (nfes: 30200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 186506 Mean: 77001.9 Std: 42522.8
+Diversity D: 0.944412
+EVAL 30500: Fitness = 108769
+EVAL 31000: Fitness = 179649
+EVAL 31500: Fitness = 44322.5
+EVAL 32000: Fitness = 71911.2
+
+Generation 161 (nfes: 32200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 186506 Mean: 68457.4 Std: 38721.5
+Diversity D: 0.913299
+EVAL 32500: Fitness = 105733
+EVAL 33000: Fitness = 45344.8
+EVAL 33500: Fitness = 91579.9
+EVAL 34000: Fitness = 112987
+
+Generation 171 (nfes: 34200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 175424 Mean: 71557.6 Std: 38773.8
+Diversity D: 0.882186
+EVAL 34500: Fitness = 130794
+EVAL 35000: Fitness = 107062
+EVAL 35500: Fitness = 136773
+EVAL 36000: Fitness = 87862.4
+
+Generation 181 (nfes: 36200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 187074 Mean: 74151.2 Std: 40893.3
+Diversity D: 0.851074
+EVAL 36500: Fitness = 123379
+EVAL 37000: Fitness = 97615.7
+EVAL 37500: Fitness = 97664.3
+EVAL 38000: Fitness = 133167
+
+Generation 191 (nfes: 38200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 175202 Mean: 72327.7 Std: 40590.5
+Diversity D: 0.819961
+EVAL 38500: Fitness = 54255.6
+EVAL 39000: Fitness = 44481.6
+EVAL 39500: Fitness = 149746
+EVAL 40000: Fitness = 112340
+*** STAGNATION WARNING: 40000 evals without improvement (best=12881.1) ***
+
+Generation 201 (nfes: 40200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 173758 Mean: 70047.3 Std: 37628.9
+Diversity D: 0.788848
+EVAL 40500: Fitness = 45391.3
+EVAL 41000: Fitness = 58606.2
+EVAL 41500: Fitness = 131330
+EVAL 42000: Fitness = 117524
+
+Generation 211 (nfes: 42200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 177059 Mean: 71056.1 Std: 38205.8
+Diversity D: 0.757736
+EVAL 42500: Fitness = 93377.4
+EVAL 43000: Fitness = 56883.5
+EVAL 43500: Fitness = 40081
+EVAL 44000: Fitness = 117875
+
+Generation 221 (nfes: 44200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 206287 Mean: 67390.3 Std: 38513.3
+Diversity D: 0.726623
+EVAL 44500: Fitness = 70237.6
+EVAL 45000: Fitness = 113153
+EVAL 45500: Fitness = 175581
+EVAL 46000: Fitness = 140868
+
+Generation 231 (nfes: 46200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 166805 Mean: 67064.1 Std: 37948.7
+Diversity D: 0.69551
+EVAL 46500: Fitness = 120111
+EVAL 47000: Fitness = 96329.6
+EVAL 47500: Fitness = 94350.1
+EVAL 48000: Fitness = 32431.9
+
+Generation 241 (nfes: 48200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 166827 Mean: 64521 Std: 38424.9
+Diversity D: 0.664398
+EVAL 48500: Fitness = 64976.2
+EVAL 49000: Fitness = 166062
+EVAL 49500: Fitness = 63740.1
+EVAL 50000: Fitness = 47827.1
+*** STAGNATION WARNING: 50000 evals without improvement (best=12881.1) ***
+
+Generation 251 (nfes: 50200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 201081 Mean: 63500.8 Std: 39956.7
+Diversity D: 0.633285
+EVAL 50500: Fitness = 62617.9
+EVAL 51000: Fitness = 95174.9
+EVAL 51500: Fitness = 97316.8
+EVAL 52000: Fitness = 102100
+
+Generation 261 (nfes: 52200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 166827 Mean: 56702.8 Std: 35979.5
+Diversity D: 0.602172
+EVAL 52500: Fitness = 79668.4
+EVAL 53000: Fitness = 59623.9
+EVAL 53500: Fitness = 66318
+EVAL 54000: Fitness = 66445.4
+
+Generation 271 (nfes: 54200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 121047 Mean: 47888 Std: 26770.6
+Diversity D: 0.571059
+EVAL 54500: Fitness = 42003.4
+EVAL 55000: Fitness = 47395.2
+EVAL 55500: Fitness = 95221.8
+EVAL 56000: Fitness = 98216.8
+
+Generation 281 (nfes: 56200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 70046.1 Mean: 37723.5 Std: 15321
+Diversity D: 0.539947
+EVAL 56500: Fitness = 35895.8
+EVAL 57000: Fitness = 105308
+EVAL 57500: Fitness = 37308.3
+EVAL 58000: Fitness = 70252.2
+
+Generation 291 (nfes: 58200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 57541.3 Mean: 34481.2 Std: 12130.4
+Diversity D: 0.508834
+EVAL 58500: Fitness = 100734
+EVAL 59000: Fitness = 85718.7
+EVAL 59500: Fitness = 71159.2
+EVAL 60000: Fitness = 126521
+*** STAGNATION WARNING: 60000 evals without improvement (best=12881.1) ***
+
+Generation 301 (nfes: 60200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 49738.9 Mean: 31525.9 Std: 10175.9
+Diversity D: 0.477721
+EVAL 60500: Fitness = 49750.4
+EVAL 61000: Fitness = 68834.8
+EVAL 61500: Fitness = 33179.7
+EVAL 62000: Fitness = 153328
+
+Generation 311 (nfes: 62200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 45097.8 Mean: 29412.8 Std: 8919.17
+Diversity D: 0.446609
+EVAL 62500: Fitness = 47931.7
+EVAL 63000: Fitness = 28638.1
+EVAL 63500: Fitness = 32901.6
+EVAL 64000: Fitness = 70990
+
+Generation 321 (nfes: 64200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 38844.4 Mean: 26847.1 Std: 7449.5
+Diversity D: 0.415496
+EVAL 64500: Fitness = 79371.9
+EVAL 65000: Fitness = 115131
+EVAL 65500: Fitness = 66244.3
+EVAL 66000: Fitness = 130638
+
+Generation 331 (nfes: 66200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 35659.8 Mean: 25554.5 Std: 6705.53
+Diversity D: 0.384383
+EVAL 66500: Fitness = 44838.6
+EVAL 67000: Fitness = 112033
+EVAL 67500: Fitness = 46393.2
+EVAL 68000: Fitness = 70536.6
+
+Generation 341 (nfes: 68200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 32498.6 Mean: 23598 Std: 6035.89
+Diversity D: 0.353271
+EVAL 68500: Fitness = 64946.7
+EVAL 69000: Fitness = 114561
+EVAL 69500: Fitness = 104894
+EVAL 70000: Fitness = 88082.7
+*** STAGNATION WARNING: 70000 evals without improvement (best=12881.1) ***
+
+Generation 351 (nfes: 70200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 29361.3 Mean: 21546.5 Std: 5705.11
+Diversity D: 0.322158
+EVAL 70500: Fitness = 37457.6
+EVAL 71000: Fitness = 51367.3
+EVAL 71500: Fitness = 153354
+EVAL 72000: Fitness = 73688.6
+
+Generation 361 (nfes: 72200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 26449.5 Mean: 18908.8 Std: 4958.47
+Diversity D: 0.291045
+EVAL 72500: Fitness = 93068.6
+EVAL 73000: Fitness = 18227
+EVAL 73500: Fitness = 21044.3
+EVAL 74000: Fitness = 79618.5
+
+Generation 371 (nfes: 74200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 22514.8 Mean: 16774.9 Std: 4369.5
+Diversity D: 0.259932
+EVAL 74500: Fitness = 99881.8
+EVAL 75000: Fitness = 22313.1
+EVAL 75500: Fitness = 99538.9
+EVAL 76000: Fitness = 173251
+
+Generation 381 (nfes: 76200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 21044.3 Mean: 14666.6 Std: 3239.58
+Diversity D: 0.22882
+EVAL 76500: Fitness = 182703
+EVAL 77000: Fitness = 54131.1
+EVAL 77500: Fitness = 19743.3
+EVAL 78000: Fitness = 182645
+
+Generation 391 (nfes: 78200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.197707
+EVAL 78500: Fitness = 12881.1
+EVAL 79000: Fitness = 57107.3
+EVAL 79500: Fitness = 86838.4
+EVAL 80000: Fitness = 12881.1
+*** STAGNATION WARNING: 80000 evals without improvement (best=12881.1) ***
+
+Generation 401 (nfes: 80200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.166594
+EVAL 80500: Fitness = 12881.1
+EVAL 81000: Fitness = 12881.1
+EVAL 81500: Fitness = 12881.1
+EVAL 82000: Fitness = 64623.3
+
+Generation 411 (nfes: 82200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.135482
+EVAL 82500: Fitness = 161350
+EVAL 83000: Fitness = 12881.1
+EVAL 83500: Fitness = 12881.1
+EVAL 84000: Fitness = 12881.1
+
+Generation 421 (nfes: 84200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.104369
+EVAL 84500: Fitness = 17083.3
+EVAL 85000: Fitness = 12881.1
+EVAL 85500: Fitness = 12881.1
+EVAL 86000: Fitness = 12881.1
+
+Generation 431 (nfes: 86200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.0732563
+EVAL 86500: Fitness = 12881.1
+EVAL 87000: Fitness = 12881.1
+EVAL 87500: Fitness = 17083.3
+EVAL 88000: Fitness = 12881.1
+
+Generation 441 (nfes: 88200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.0421436
+EVAL 88500: Fitness = 12881.1
+EVAL 89000: Fitness = 83034.3
+EVAL 89500: Fitness = 20500.6
+EVAL 90000: Fitness = 12881.1
+*** STAGNATION WARNING: 90000 evals without improvement (best=12881.1) ***
+
+Generation 451 (nfes: 90200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: 0.0110309
+EVAL 90500: Fitness = 69031.8
+EVAL 91000: Fitness = 12881.1
+EVAL 91500: Fitness = 12881.1
+EVAL 92000: Fitness = 72927.1
+
+Generation 461 (nfes: 92200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: -1
+EVAL 92500: Fitness = 12881.1
+EVAL 93000: Fitness = 12881.1
+EVAL 93500: Fitness = 12881.1
+EVAL 94000: Fitness = 12881.1
+
+Generation 471 (nfes: 94200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: -1
+EVAL 94500: Fitness = 12881.1
+EVAL 95000: Fitness = 12881.1
+EVAL 95500: Fitness = 12881.1
+EVAL 96000: Fitness = 12881.1
+
+Generation 481 (nfes: 96200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: -1
+EVAL 96500: Fitness = 12881.1
+EVAL 97000: Fitness = 12881.1
+EVAL 97500: Fitness = 12881.1
+EVAL 98000: Fitness = 12881.1
+
+Generation 491 (nfes: 98200)
+Best Fitness: 12881.1
+Pop Stats - Min: 12881.1 Max: 12881.1 Mean: 12881.1 Std: 2.72848e-11
+Diversity D: -1
+EVAL 98500: Fitness = 12881.1
+EVAL 99000: Fitness = 12881.1
+EVAL 99500: Fitness = 12881.1
+EVAL 100000: Fitness = 36430.8
+*** STAGNATION WARNING: 100000 evals without improvement (best=12881.1) ***
+
+ALGORITHM TERMINATION
+===================
+Total Generations: 499
+Total Evaluations: 100000
+Final Best Fitness: 12881.1
+Final Diversity Parameter D: -1
+
+=================================
+End Time: 1774370962.102568
+Total Execution Time: 7.68053 seconds
+=================================

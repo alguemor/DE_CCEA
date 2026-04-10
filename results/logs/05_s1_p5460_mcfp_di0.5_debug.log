@@ -1,0 +1,178 @@
+=== DE-CCEA ALGORITHM DEBUG LOG ===
+Dataset: 05
+Method: mcfp
+Seed: 1
+Problem Size: 5460
+Population Size: 200
+Max Evaluations: 5000
+Diversity Parameter (Di): 36.9459
+Number of Clusters: 5
+Variables per Cluster: 1092
+Number of Points: 155
+Cardinality Constraints: C0=18 C1=34 C2=34 C3=36 C4=33 
+Total Capacity: 155 (Points: 155)
+Start Time: 1774376440.48801
+=================================
+
+[MCFP] Eval 1: MaxFlow=155 (expected=155) MinCost=476248302015
+EVAL 1: Fitness = 9.41274e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 1) ===
+Fitness: 9.41274e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=4.97636e+06 C1=1.36679e+06 C2=1.73991e+06 C3=1.32595e+06 C4=3732.28 
+[MCFP] Eval 2: MaxFlow=155 (expected=155) MinCost=566990997077
+EVAL 2: Fitness = 9.51887e+06
+[MCFP] Eval 3: MaxFlow=155 (expected=155) MinCost=458755307176
+EVAL 3: Fitness = 9.54787e+06
+EVAL 4: Fitness = 9.43637e+06
+EVAL 5: Fitness = 9.5498e+06
+EVAL 6: Fitness = 9.50598e+06
+EVAL 7: Fitness = 9.52017e+06
+EVAL 8: Fitness = 9.46868e+06
+EVAL 9: Fitness = 9.49423e+06
+EVAL 10: Fitness = 9.44104e+06
+EVAL 11: Fitness = 9.51559e+06
+EVAL 12: Fitness = 9.44401e+06
+EVAL 13: Fitness = 9.47306e+06
+EVAL 14: Fitness = 9.55122e+06
+EVAL 15: Fitness = 9.55138e+06
+EVAL 16: Fitness = 9.54037e+06
+EVAL 17: Fitness = 9.42105e+06
+EVAL 18: Fitness = 9.5498e+06
+EVAL 19: Fitness = 9.52041e+06
+EVAL 20: Fitness = 9.38866e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 20) ===
+Fitness: 9.38866e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=5.74779e+06 C1=1.31521e+06 C2=2.31533e+06 C3=2623.77 C4=7710.26 
+EVAL 21: Fitness = 9.41332e+06
+EVAL 22: Fitness = 9.4797e+06
+EVAL 23: Fitness = 9.44988e+06
+EVAL 24: Fitness = 9.42913e+06
+EVAL 25: Fitness = 9.4371e+06
+EVAL 26: Fitness = 9.42552e+06
+EVAL 27: Fitness = 9.51376e+06
+EVAL 28: Fitness = 9.54852e+06
+EVAL 29: Fitness = 9.51644e+06
+EVAL 30: Fitness = 9.54969e+06
+EVAL 31: Fitness = 9.47616e+06
+EVAL 32: Fitness = 9.41683e+06
+EVAL 33: Fitness = 9.43525e+06
+EVAL 34: Fitness = 9.50847e+06
+EVAL 35: Fitness = 9.55408e+06
+EVAL 36: Fitness = 9.41898e+06
+EVAL 37: Fitness = 9.46903e+06
+EVAL 38: Fitness = 9.43865e+06
+EVAL 39: Fitness = 9.48942e+06
+EVAL 40: Fitness = 9.54477e+06
+EVAL 41: Fitness = 9.42536e+06
+EVAL 42: Fitness = 9.32983e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 42) ===
+Fitness: 9.32983e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=7.94142e+06 C1=1.36524e+06 C2=3330.39 C3=6149.66 C4=13693.4 
+EVAL 43: Fitness = 9.51409e+06
+EVAL 44: Fitness = 9.51301e+06
+EVAL 45: Fitness = 9.40998e+06
+EVAL 46: Fitness = 9.55943e+06
+EVAL 47: Fitness = 9.54641e+06
+EVAL 48: Fitness = 9.54607e+06
+EVAL 49: Fitness = 9.48818e+06
+EVAL 50: Fitness = 9.38966e+06
+INITIAL POPULATION EVALUATION
+============================
+Individual 0 Fitness: 9.41274e+06
+  Centroids: -1.0518 -0.382374 0.0771259 -0.190351 -0.35307 -1.85996 -1.54764 -0.658102 -1.4732 -1.02368 -1.1369 -0.84371 -1.35344 -1.05452 -0.28277 -0.33646 -0.816534 -0.665428 -1.6431 -0.836745 ...
+Individual 1 Fitness: 9.51887e+06
+  Centroids: -2.87921 -0.774334 -1.70687 -1.87646 -0.561666 -2.09701 -0.762358 -1.37207 -1.73353 -1.557 -1.89842 -1.37154 -1.65671 -0.372528 -1.40715 -1.35944 -1.74809 -1.72414 -1.18708 -1.64751 ...
+Individual 2 Fitness: 9.54787e+06
+  Centroids: -2.49791 -0.883521 0.349679 -1.59877 -1.46109 -0.373903 -1.17866 -0.999704 -1.67984 -1.88576 -0.276045 -0.705321 -0.404243 -1.0265 -1.14428 -1.62785 -0.916542 -0.26101 -1.80637 -0.23569 ...
+Individual 3 Fitness: 9.43637e+06
+  Centroids: -2.26888 0.583824 -0.196198 -0.801643 -2.17719 -0.791017 -1.50867 -1.5685 -1.57456 -1.35421 -0.441236 -1.67544 -0.721442 -0.499653 -0.445602 -1.1039 -0.975013 -1.54558 -1.67131 -1.14233 ...
+Individual 4 Fitness: 9.5498e+06
+  Centroids: -0.706348 -0.516448 -0.412603 -1.45819 -1.97355 -1.64183 -1.49611 -0.531745 -0.915676 -1.5166 -1.83815 -1.11571 -1.5079 -1.91075 -1.45927 -1.10126 -0.722128 -1.23999 -0.638203 -1.3178 ...
+
+INITIAL BEST SOLUTION
+===================
+Best Fitness: 9.41274e+06
+
+STARTING MAIN EVOLUTION LOOP
+============================
+
+Generation 1 (nfes: 200)
+Best Fitness: 9.32983e+06
+Pop Stats - Min: 9.32983e+06 Max: 9.55943e+06 Mean: 9.50051e+06 Std: 50673.9
+Diversity D: 35.3203
+EVAL 442: Fitness = 9.32755e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 442) ===
+Fitness: 9.32755e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=7.94152e+06 C1=1.36399e+06 C2=2906.05 C3=6419.05 C4=12709.8 
+EVAL 500: Fitness = 9.47296e+06
+EVAL 517: Fitness = 9.29314e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 517) ===
+Fitness: 9.29314e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=9.26575e+06 C1=3605.25 C2=3173.94 C3=14977.5 C4=5634.64 
+
+Generation 2 (nfes: 400)
+Best Fitness: 9.32983e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.55943e+06 Mean: 9.49772e+06 Std: 52607
+Diversity D: 33.6947
+NEW BEST SOLUTION FOUND!
+Generation: 2, nfes: 442
+Old fitness: 9.32983e+06 -> New fitness: 9.32755e+06
+NEW BEST SOLUTION FOUND!
+Generation: 2, nfes: 517
+Old fitness: 9.32755e+06 -> New fitness: 9.29314e+06
+
+Generation 3 (nfes: 600)
+Best Fitness: 9.29314e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.55943e+06 Mean: 9.49815e+06 Std: 51917.5
+Diversity D: 32.069
+EVAL 1000: Fitness = 9.37668e+06
+
+Generation 4 (nfes: 800)
+Best Fitness: 9.29314e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.55991e+06 Mean: 9.49815e+06 Std: 49504.2
+Diversity D: 30.4434
+
+Generation 5 (nfes: 1000)
+Best Fitness: 9.29314e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.55991e+06 Mean: 9.49696e+06 Std: 50114.2
+Diversity D: 28.8178
+EVAL 1500: Fitness = 9.50612e+06
+EVAL 2000: Fitness = 9.54193e+06
+
+Generation 11 (nfes: 2200)
+Best Fitness: 9.29314e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.56239e+06 Mean: 9.49428e+06 Std: 51892.1
+Diversity D: 19.0641
+EVAL 2500: Fitness = 9.55698e+06
+EVAL 3000: Fitness = 9.44177e+06
+EVAL 3500: Fitness = 9.54935e+06
+EVAL 4000: Fitness = 9.46813e+06
+
+Generation 21 (nfes: 4200)
+Best Fitness: 9.29314e+06
+Pop Stats - Min: 9.29314e+06 Max: 9.56236e+06 Mean: 9.49373e+06 Std: 52763.1
+Diversity D: 2.80789
+EVAL 4500: Fitness = 9.51494e+06
+EVAL 5000: Fitness = 9.51627e+06
+EVAL 5011: Fitness = 9.28884e+06 *** NEW BEST ***
+=== NEW BEST SOLUTION DETAILS (Eval 5011) ===
+Fitness: 9.28884e+06
+Cluster sizes (actual/limit): C0=18/18 C1=34/34 C2=34/34 C3=36/36 C4=33/33 
+Per-cluster fitness: C0=9.26516e+06 C1=2904.2 C2=9038.83 C3=4948.59 C4=6787.82 
+
+ALGORITHM TERMINATION
+===================
+Total Generations: 24
+Total Evaluations: 5000
+Final Best Fitness: 9.29314e+06
+Final Diversity Parameter D: -1
+
+=================================
+End Time: 1774376614.716285
+Total Execution Time: 174.667 seconds
+=================================
