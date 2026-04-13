@@ -173,6 +173,32 @@ Fitness ClusteringBridge::evaluateIndividual(Individual individual){
     return fitness;
 }
 
+Fitness ClusteringBridge::evaluateAndRetainAssignment(Individual individual,
+                                                       vector<int>& outAssignment) {
+    Solution* solution = nullptr;
+    individualToSolution(individual, solution);
+
+    if(solverMethod == "greedy"){
+        Greedy* g = static_cast<Greedy*>(solution);
+        g->sortDistancesGreedy();
+        g->greedy();
+    } else if(solverMethod == "mcfp"){
+        MCFP* m = static_cast<MCFP*>(solution);
+        m->buildMCFPGraph();
+        m->solveMCFPFlow();
+        m->extractAssignmentFromFlow();
+    }
+
+    solution->updateEvaluation();
+    Fitness fit = solution->getFitness();
+
+    // Retener la asignacion antes de eliminar la solucion
+    outAssignment = solution->getAssignment();
+
+    delete solution;
+    return fit;
+}
+
 int ClusteringBridge::getNumClusters() const {
     return problem->getNumClusters();
 }
@@ -183,6 +209,54 @@ int ClusteringBridge::getNumPoints() const {
 
 int ClusteringBridge::getDimension() const {
     return problem->getVariables();
+}
+
+void ClusteringBridge::setBestFitnessFromLS(Fitness fit, const vector<int>& assignment,
+                                             Individual individual) {
+    bestFitness    = fit;
+    bestAssignment = assignment;
+
+    // Recalcular centroides reales desde la asignacion mejorada por LS
+    int K = problem->getNumClusters();
+    int D = problem->getVariables();
+    const auto& dataset = problem->getDataset();
+
+    bestAfterCenters.assign(K, vector<long double>(D, 0.0L));
+    vector<int> counts(K, 0);
+    for(int p = 0; p < (int)assignment.size(); p++){
+        int c = assignment[p];
+        if(c < 0 || c >= K) continue;
+        for(int d = 0; d < D; d++)
+            bestAfterCenters[c][d] += dataset[p][d];
+        counts[c]++;
+    }
+    for(int c = 0; c < K; c++)
+        if(counts[c] > 0)
+            for(int d = 0; d < D; d++)
+                bestAfterCenters[c][d] /= counts[c];
+
+    // Recalcular clusterValues y pointDistances para consistencia
+    Solution* sol = nullptr;
+    individualToSolution(individual, sol);
+    sol->assignment = assignment;   // inyectar asignacion LS
+    sol->updateEvaluation();
+    bestClusterValues = sol->getClusterValues();
+    delete sol;
+
+    // Recalcular distancias de puntos a centroides
+    bestPointDistances.clear();
+    bestPointDistances.resize(dataset.size());
+    for(size_t i = 0; i < dataset.size(); i++){
+        int c = bestAssignment[i];
+        long double dist = 0.0L;
+        for(int d = 0; d < D; d++){
+            long double diff = dataset[i][d] - bestAfterCenters[c][d];
+            dist += diff * diff;
+        }
+        bestPointDistances[i] = { sqrtl(dist) };
+    }
+
+    LOG_INFO("LS_BRIDGE_UPDATE fitness=" << fit);
 }
 
 const vector<vector<long double>>& ClusteringBridge::getBestAfterCenters() const {

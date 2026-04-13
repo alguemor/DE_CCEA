@@ -9,6 +9,7 @@ authors: Joel Chacón Castillo, Carlos Segura González
 
 #include"de.h"
 #include "bridge.h"
+#include "local_search.h"
 
 extern ClusteringBridge* g_clusteringBridge;
 
@@ -125,6 +126,22 @@ Fitness DIVERSITY::run() {
   //int *sorted_array = (int*)malloc(sizeof(int) * pop_size);
   //Fitness *temp_fit = (Fitness*)malloc(sizeof(Fitness) * pop_size);
 
+  // Crear LocalSearch (una vez, reutilizado cada generacion)
+  LocalSearch* ls = nullptr;
+  if(g_clusteringBridge != nullptr) {
+      ls = new LocalSearch(
+          g_clusteringBridge,
+          nfes,
+          (int)max_num_evaluations,
+          g_clusteringBridge->getNumClusters(),
+          g_clusteringBridge->getNumPoints(),
+          g_clusteringBridge->getDimension()
+      );
+      LOG_INFO("LOCAL SEARCH enabled: K=" << g_clusteringBridge->getNumClusters()
+               << " N=" << g_clusteringBridge->getNumPoints()
+               << " D=" << g_clusteringBridge->getDimension());
+  }
+
   //main loop
   int generation = 0;
   LOG_INFO("STARTING MAIN EVOLUTION LOOP");
@@ -187,6 +204,48 @@ Fitness DIVERSITY::run() {
   
     // evaluate the children's fitness values
     evaluatePopulation(children, children_fitness);
+
+    /////////////////////////////////////////////////////////////////////////
+    // LOCAL SEARCH: aplicar al mejor hijo de esta generacion
+    if(ls != nullptr && nfes < max_num_evaluations) {
+        int best_child_idx = 0;
+        for(int i = 1; i < pop_size; i++)
+            if(children_fitness[i] < children_fitness[best_child_idx])
+                best_child_idx = i;
+
+        vector<int> best_assignment;
+        Fitness refit = g_clusteringBridge->evaluateAndRetainAssignment(
+            children[best_child_idx], best_assignment);
+
+        LOG_INFO("LS_ENTRY gen=" << generation
+                 << " best_child=" << best_child_idx
+                 << " fit=" << children_fitness[best_child_idx]
+                 << " nfes=" << nfes);
+
+        Fitness ls_fitness = ls->apply(children[best_child_idx], refit,
+                                       best_assignment, generation);
+
+        if(ls_fitness < children_fitness[best_child_idx]) {
+            LOG_INFO("LS_UPDATE_CHILD gen=" << generation
+                     << " old=" << children_fitness[best_child_idx]
+                     << " new=" << ls_fitness);
+            children_fitness[best_child_idx] = ls_fitness;
+
+            // Actualizar BSF si la mejora de LS supera el mejor global
+            if(ls_fitness < bsf_fitness) {
+                LOG_INFO("LS_NEW_BSF gen=" << generation
+                         << " old=" << bsf_fitness
+                         << " new=" << ls_fitness);
+                bsf_fitness = ls_fitness;
+                for(int j = 0; j < problem_size; j++)
+                    bsf_solution[j] = children[best_child_idx][j];
+                g_clusteringBridge->setBestFitnessFromLS(ls_fitness,
+                    ls->getLastAssignment(), children[best_child_idx]);
+            }
+        }
+    }
+    // FIN LOCAL SEARCH
+    /////////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////////
     //update the bsf-solution and check the current number of fitness evaluations
@@ -317,6 +376,7 @@ Fitness DIVERSITY::run() {
   //free(sorted_array);
   //free(temp_fit); //.clear();
     // cout << bsf_fitness << endl;
+    if(ls != nullptr) { delete ls; ls = nullptr; }
     return bsf_fitness - optimum;
 }
 

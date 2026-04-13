@@ -25,6 +25,10 @@ public:
     
     // evalua individuo y retorna fitness
     Fitness evaluateIndividual(Individual individual);
+
+    // evalua individuo, retiene la asignacion resultante (para LocalSearch)
+    Fitness evaluateAndRetainAssignment(Individual individual,
+                                        vector<int>& outAssignment);
     
     int getNumClusters() const;
     int getNumPoints() const;
@@ -34,6 +38,10 @@ public:
 
     const vector<vector<long double>>& getBestAfterCenters() const;
     void setBestAfterCenters(const vector<vector<long double>>& centers);
+
+    // Notifica al bridge un nuevo mejor encontrado por LocalSearch
+    void setBestFitnessFromLS(Fitness fit, const vector<int>& assignment,
+                              Individual individual);
     
     const vector<int>& getBestAssignment() const;
     const vector<long double>& getBestClusterValues() const;

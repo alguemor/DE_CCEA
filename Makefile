@@ -2,7 +2,7 @@ HEADER = de.h
 TARGET = DE_CCEA_exe
 
 OBJS := $(patsubst %.cc,%.o,$(wildcard *.cc)) \
-    problem.o solution.o util.o dataset_manager.o bridge.o logger.o
+    problem.o solution.o util.o dataset_manager.o bridge.o local_search.o logger.o
 CC = g++
 OPTION = -Ofast -march=native -D_GLIBCXX_USE_C99_MATH_TR1
 
@@ -26,6 +26,9 @@ dataset_manager.o: dataset_manager.cpp dataset_manager.h
 
 bridge.o: bridge.cpp bridge.h
 	$(CC) $(CFLAGS) $(OPTION) -c bridge.cpp
+
+local_search.o: local_search.cpp local_search.h bridge.h problem.h de.h logger.h
+	$(CC) $(CFLAGS) $(OPTION) -c local_search.cpp
 
 logger.o: logger.cpp logger.h
 	$(CC) $(CFLAGS) $(OPTION) -c logger.cpp
